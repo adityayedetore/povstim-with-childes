@@ -1,0 +1,52 @@
+Transcription ,Cleaned
+double brackets first test [* dog] [% dog] .,double brackets first test .
+double brackets second test  [% dog] [=? dog] .,double brackets second test .
+noncompleation of word deleted te(dog)st .,noncompleation of word deleted test .
+question mark should be kept test ? ,question mark should be kept test ?
+"comma should be kept test , . ","comma should be kept test , ."
+period should be kept test . ,period should be kept test .
+quick uptake deleted test . +^,quick uptake deleted test .
+special form markers deleted test@a .,special form markers deleted test .
+unintelligible kept empty sentence xxx .,unintelligible kept empty sentence xxx .
+untranscribe material kept test  www .,untranscribe material kept test www .
+phonological coding kept test yyy .,phonological coding kept test yyy .
+phonological fragments deleted test&dog .,phonological fragments deleted test .
+omitted content deleted test 0 .,omitted content deleted test .
+prolongation deleted test : .,prolongation deleted test .
+special characters deleted test ↑ ↓ ⇗ ↗ → ↘ ⇘ ∞ ≈ ≋ ≡ ∙ ⌈ ⌉ ⌊ ⌋ ∆ ∇ ⁎ ⁇ ° ◉ . ,special characters deleted test .
+  special characters deleted test cont ▁ ▔ ☺ ∬ Ϋ ∲ § ∾ ↻ Ἡ „ ‡ ạ ʰ ā ʔ ʕ š “ ” .  ,special characters deleted test cont .
+  special characters in word deleted test⌋ .  ,special characters in word deleted test .
+  special characters in word deleted test↑ .  ,special characters in word deleted test .
+  special characters in word deleted↑ test cont .  ,special characters in word deleted test cont .
+  special characters in word deleted test /.  ,special characters in word deleted test .
+"  quotation mark at end deleted test \.  """,quotation mark at end deleted test .
+repetition deleted test [//] .,repetition deleted test .
+retracing deleted test [/] .,retracing deleted test .
+repetition deleted test[//] .,repetition deleted test .
+retracing deleted test[/] .,retracing deleted test .
+error replacement test [: dog] .,error replacement test .
+elaboration replacement deleted test [= dog] .,elaboration replacement deleted test .
+short pause deleted test (.) .,short pause deleted test .
+mid pause deleted test (..) .,mid pause deleted test .
+long pause deleted test (...) .,long pause deleted test .
+uncertian deleted test[?] .,uncertian deleted test .
+trailing off leave dot dot dot test +...,trailing off leave dot dot dot test ...
+syntactic structures deleted test ; .,syntactic structures deleted test .
+comment deleted test [% dog] [% text] .,comment deleted test .
+best guess mark deleted test [?] .,best guess mark deleted test .
+unclear marks deleted <test> .,unclear marks deleted test .
+overlap deleted test [>] [<] .,overlap deleted test .
+note about laugh deleated [=! laughing] test .,note about laugh deleated test .
+note about laugh deleated[=! laughing] test .,note about laugh deleated test .
+anything between brackets deleted test [a dog ate a bone] .,anything between brackets deleted test .
+strange symbol test 1335 .,strange symbol test .
+slash test /\ / \ .,slash test .
+small identifier check test .,small identifier check test .
+no break for extra star  test .,no break for extra star test .
+"continues after line end 
+	with tab test .",continues after line end with tab test .
+period with word split test. ,period with word split test .
+"comma with word split, test .","comma with word split , test ."
+question mark with word split test?,question mark with word split test ?
+question mark with word end ⌊test⌋?,question mark with word end test ?
+yyy !,yyy !

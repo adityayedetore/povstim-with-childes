@@ -1,0 +1,110 @@
+@UTF8
+@PID:	11312/c-00015218-1
+@Begin
+@Languages:	eng
+@Participants:	CHI Target_Child , MOT Mother
+@ID:	eng|Bates|CHI|1;08.|female|typical|MC|Target_Child|||
+@ID:	eng|Bates|MOT||female|||Mother|||
+@Bg:	mother_freeplay
+*MOT:	double brackets first test [* dog] [% dog] .
+%mor:   neg|not 
+*MOT:	double brackets second test  [% dog] [=? dog] .
+%mor:   neg|not 
+*MOT:	noncompleation of word deleted te(dog)st .
+%mor:   neg|not 
+*MOT:	question mark should be kept test ? 
+%mor:   neg|not 
+*MOT:	comma should be kept test , . 
+%mor:   neg|not 
+*MOT:	period should be kept test . 
+%mor:   neg|not 
+*MOT:	quick uptake deleted test . +^
+%mor:   neg|not 
+*MOT:	special form markers deleted test@a .
+%mor:   neg|not 
+*MOT:	unintelligible kept empty sentence xxx .
+%mor:   neg|not 
+*MOT:	untranscribe material kept test  www .
+%mor:   neg|not 
+*MOT:	phonological coding kept test yyy .
+%mor:   neg|not 
+*MOT:	phonological fragments deleted test&dog .
+%mor:   neg|not 
+*MOT:	omitted content deleted test 0 .
+%mor:   neg|not 
+*MOT:	prolongation deleted test : .
+%mor:   neg|not 
+*MOT:	special characters deleted test ↑ ↓ ⇗ ↗ → ↘ ⇘ ∞ ≈ ≋ ≡ ∙ ⌈ ⌉ ⌊ ⌋ ∆ ∇ ⁎ ⁇ ° ◉ . 
+%mor:   neg|not 
+*MOT:   special characters deleted test cont ▁ ▔ ☺ ∬ Ϋ ∲ § ∾ ↻ Ἡ „ ‡ ạ ʰ ā ʔ ʕ š “ ” .  
+%mor:   neg|not 
+*MOT:   special characters in word deleted test⌋ .  
+%mor:   neg|not 
+*MOT:   special characters in word deleted test↑ .  
+%mor:   neg|not 
+*MOT:   special characters in word deleted↑ test cont .  
+%mor:   neg|not 
+*MOT:   special characters in word deleted test /.  
+%mor:   neg|not 
+*MOT:   quotation mark at end deleted test ".  
+%mor:   neg|not 
+*MOT:	repetition deleted test [//] .
+%mor:   neg|not 
+*MOT:	retracing deleted test [/] .
+%mor:   neg|not 
+*MOT:	repetition deleted test[//] .
+%mor:   neg|not 
+*MOT:	retracing deleted test[/] .
+%mor:   neg|not 
+*MOT:	error replacement test [: dog] .
+%mor:   neg|not 
+*MOT:	elaboration replacement deleted test [= dog] .
+%mor:   neg|not 
+*MOT:	short pause deleted test (.) .
+%mor:   neg|not 
+*MOT:	mid pause deleted test (..) .
+%mor:   neg|not 
+*MOT:	long pause deleted test (...) .
+%mor:   neg|not 
+*MOT:	uncertian deleted test[?] .
+%mor:   neg|not 
+*MOT:	trailing off leave dot dot dot test +...
+%mor:   neg|not 
+*MOT:	syntactic structures deleted test ; .
+%mor:   neg|not 
+*MOT:	comment deleted test [% dog] [% text] .
+%mor:   neg|not 
+*MOT:	best guess mark deleted test [?] .
+%mor:   neg|not 
+*MOT:	unclear marks deleted <test> .
+%mor:   neg|not 
+*MOT:	overlap deleted test [>] [<] .
+%mor:   neg|not 
+*MOT:	note about laugh deleated [=! laughing] test .
+%mor:   neg|not 
+*MOT:	note about laugh deleated[=! laughing] test .
+%mor:   neg|not 
+*MOT:	anything between brackets deleted test [a dog ate a bone] .
+%mor:   neg|not 
+*MOT:	strange symbol test 1335 .
+%mor:   neg|not 
+*MOT:	slash test /\ / \ .
+%mor:   neg|not 
+*MO:	small identifier check test .
+%mor:   neg|not 
+*MO:	no break for extra star [*] test .
+%mor:   neg|not 
+*MO:	continues after line end 
+	with tab test .
+%mor:   neg|not 
+*MO:	period with word split test. 
+%mor:   neg|not 
+*MO:	comma with word split, test .
+%mor:   neg|not 
+*MO:	question mark with word split test?
+%mor:   neg|not 
+*MO:	question mark with word end ⌊test⌋?
+%mor:   neg|not 
+*CHI:	yyy !
+%mor:   neg|not 
+@End
