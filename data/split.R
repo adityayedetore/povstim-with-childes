@@ -9,6 +9,7 @@
 ##
 ## Steps: 1) Gather the non-child utterances (sentence) and the name of 
 ##           the files they came from. 
+##        2) Shuffel by filename
 ##        2) Create a map from file name to number of utterances. 
 ##        3) Order map by frequency. 
 ##        4) Iterate through sets of n (=30) file names in map, randomly
@@ -27,6 +28,7 @@
 
 library(stringr)
 
+
 if (!file.exists("gloss-and-filename.txt")) {
     print("====gathering data====")
     file.create("gloss-and-filename.txt")
@@ -44,9 +46,24 @@ if (!file.exists("gloss-and-filename.txt")) {
     }
     print("gloss-and-filename.txt")
 }
-print("====splitting data====")
-data <- read.delim(file="gloss-and-filename.txt", header=FALSE)
+library(dplyr)
+print("====shuffling data====")
+orig <- read.delim(file="gloss-and-filename.txt", header=FALSE)
+colnames(orig) <- c("Gloss", "Filename")
+orig %>% 
+    group_by(Filename) %>%
+    group_split() %>%
+    sample() -> data_split
+file.create("tmp.txt")
+for (w in data_split) {
+    write.table(w, file="tmp.txt", sep="\t", 
+                col.names=FALSE, row.names=FALSE, quote=FALSE, append=TRUE)
+}
+
+data <- read.delim(file="tmp.txt", header=FALSE)
 colnames(data) <- c("Gloss", "Filename")
+file.remove("tmp.txt")
+print("====splitting data====")
 h <- as.data.frame(table(data$Filename))
 h <- h[order(-h$Freq),]
 Set <- rep("train", nrow(h))
@@ -58,8 +75,9 @@ for (i in seq(0, nrow(h) - n, n)) {
 }
 h$Set <- Set
 data <- merge(data, h, by.x = "Filename", by.y = "Var1", all.x = TRUE, all.y = FALSE)
-if (!dir.exists("split-data")) 
-    dir.create("split-data")
+
+if(!dir.exists("split-data"))
+   dir.create("split-data")
 write.table(data[,c("Gloss", "Filename", "Set")], file="split-data/split.txt", 
             sep="\t", col.names=FALSE, row.names=FALSE, quote=FALSE, append=FALSE)
 print("split-data/split.txt")
