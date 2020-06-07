@@ -32,7 +32,7 @@ library(stringr)
 if (!file.exists("gloss-and-filename.txt")) {
     print("====gathering data====")
     file.create("gloss-and-filename.txt")
-    paths = sample(list.files("processed", full.names=TRUE))
+    paths = list.files("processed", full.names=TRUE)
     for (p in paths) {
         print(p)
         utts<-read.table(file=p, header=TRUE)
@@ -47,23 +47,13 @@ if (!file.exists("gloss-and-filename.txt")) {
     print("gloss-and-filename.txt")
 }
 library(dplyr)
-print("====shuffling data====")
-orig <- read.delim(file="gloss-and-filename.txt", header=FALSE)
-colnames(orig) <- c("Gloss", "Filename")
-orig %>% 
-    group_by(Filename) %>%
-    group_split() %>%
-    sample() -> data_split
-file.create("tmp.txt")
-for (w in data_split) {
-    write.table(w, file="tmp.txt", sep="\t", 
-                col.names=FALSE, row.names=FALSE, quote=FALSE, append=TRUE)
-}
 
-data <- read.delim(file="tmp.txt", header=FALSE)
+
+print("====reading data====")
+data <- read.delim(file="gloss-and-filename.txt", header=FALSE)
 colnames(data) <- c("Gloss", "Filename")
-file.remove("tmp.txt")
-print("====splitting data====")
+
+print("====assigning data====")
 h <- as.data.frame(table(data$Filename))
 h <- h[order(-h$Freq),]
 Set <- rep("train", nrow(h))
@@ -76,6 +66,21 @@ for (i in seq(0, nrow(h) - n, n)) {
 h$Set <- Set
 data <- merge(data, h, by.x = "Filename", by.y = "Var1", all.x = TRUE, all.y = FALSE)
 
+print("====shuffling data====")
+data %>% 
+    group_by(Filename) %>%
+    group_split() %>%
+    sample() -> data_split
+file.create("tmp.txt")
+for (w in data_split) {
+    write.table(w, file="tmp.txt", sep="\t", 
+                col.names=FALSE, row.names=FALSE, quote=FALSE, append=TRUE)
+}
+data <- read.delim(file="tmp.txt", header=FALSE)
+colnames(data) <- c("Filename", "Gloss", "Freq", "Set")
+file.remove("tmp.txt")
+
+print("====saving data====")
 if(!dir.exists("split-data"))
    dir.create("split-data")
 write.table(data[,c("Gloss", "Filename", "Set")], file="split-data/split.txt", 
