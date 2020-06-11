@@ -20,7 +20,9 @@ paths <- list.dirs(path="childes", recursive=FALSE)
 n <- length(paths)
 start_number <- 1
 #for (p in c("tests") ) { # for testing purposes
+print("====all corpora====")
 print(paths)
+print("====starting processing====")
 for (p in paths[start_number:n]) { # for
     print(paste(start_number, p, sep=" : "))
     start_number <- start_number + 1
