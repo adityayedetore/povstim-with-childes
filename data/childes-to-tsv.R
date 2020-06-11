@@ -23,6 +23,8 @@ start_number <- 1
 print("====all corpora====")
 print(paths)
 print("====starting processing====")
+if (!dir.exists("processed"))
+    dir.create("processed")
 for (p in paths[start_number:n]) { # for
     print(paste(start_number, p, sep=" : "))
     start_number <- start_number + 1
@@ -35,11 +37,10 @@ for (p in paths[start_number:n]) { # for
     ###################################################
 
     #Save the output file in in processed directory
-    setwd("processed")
-    out_filename = paste(gsub("/", "-", p), ".txt", sep="")
+    out_filename = paste(gsub("childes/", "", p), ".txt", sep="")
+    out_filename = paste("processed/", out_filename, sep="")
     file.create(out_filename)
     #this gives you an excel-style file with as many columns as column names)
     write.table(mydata, file=out_filename, sep="\t", col.names = NA)
-    setwd("../")
 }
 
