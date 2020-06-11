@@ -53,10 +53,10 @@ library(plyr)
 
 read.CLAN.file <- function(f) {
 	tmp <- readLines(f)
-    if (length(tmp) < 20) {
-        # This checks for dummy files and empty files
-        return(data.frame())
-    }
+	if (length(tmp) < 20) {
+		# This checks for dummy files and empty files
+		return(data.frame())
+	}
 	# Cycle through utterances and make a line for each.
 	alltext <- paste(tmp, collapse="\n")
 	utts <- unlist(strsplit(alltext, "\n\\*"))
@@ -91,13 +91,12 @@ read.CLAN.file <- function(f) {
 	#Get rid of some yucky processing columns we don't want
 	data$t.as.matrix.fields.. <- NULL
 	xnums <- as.numeric(gsub("[^0-9]*[0-9]*[^0-9]*[0-9]*[^0-9]*[0-9]*[^0-9]+", "", names(data), perl=T)) 		# what a hack
-    if (length(xnums[!is.na(xnums)]) != 0) {
-        for(x in min(xnums, na.rm=T):max(xnums, na.rm=T)) {
-            xname <- paste("X", x, sep="")
-            data <- data[,!(names(data) %in% xname)]
-
-        }
-    }
+	if (length(xnums[!is.na(xnums)]) != 0) {
+		for(x in min(xnums, na.rm=T):max(xnums, na.rm=T)) {
+			xname <- paste("X", x, sep="")
+			data <- data[,!(names(data) %in% xname)]
+		}
+	}
 	
 	#Make sure row names are preserved!
 	data$Utt.Number <- row.names(data)
@@ -107,39 +106,37 @@ read.CLAN.file <- function(f) {
 } #End read.CLAN.file
 
 get_utt_info <- function(u){
-    #remove "[*]"
-    u = gsub("\\[\\*\\]", "", u)
+	#remove "[*]"
+	u = gsub("\\[\\*\\]", "", u)
 	#Divide the line into individual utterances & tiers
 	fields <- unlist(strsplit(u, "\n%|\n@"))
 	#Make a dataframe
 	myrow <- data.frame(t(as.matrix(fields)))
 	
 	#Add utterance info
-    divloc = gregexpr(":", fields[1])[[1]][1] - 1
+	divloc = gregexpr(":", fields[1])[[1]][1] - 1
 	myrow$Speaker <- substr(fields[1], 1, divloc)
 	myrow$Verbatim <- substr(fields[1], divloc + 3, nchar(fields[1]))
-    myrow$Gloss <- NA
+	myrow$Gloss <- NA
 	
 	#Add info from any tiers, as they appear in the file
 	if (length(fields) > 1){
 		for (j in 2:length(fields)){
-            divloc = gregexpr(":", fields[j])[[1]][1] - 1
-            if (divloc > 0) {
-                tier <- data.frame(substr(fields[j], divloc + 3, nchar(fields[j])))
-                names(tier) <- c(substr(fields[j], 1, divloc))
-                myrow <- cbind(myrow, tier)
-            }
+			divloc = gregexpr(":", fields[j])[[1]][1] - 1
+			if (divloc > 0) {
+				tier <- data.frame(substr(fields[j], divloc + 3, nchar(fields[j])))
+				names(tier) <- c(substr(fields[j], 1, divloc))
+				myrow <- cbind(myrow, tier)
+			}
 		}
 	}
 	
 	#The rest is to clean up the gloss
 
-    # Add a space before punctuated marks at word ends
-    wordsString = myrow$Verbatim
-
-
-    wordsString  = gsub("[", " [", wordsString, fixed=TRUE)
-    wordsString  = gsub("", " ", wordsString, fixed=TRUE)
+	# Add a space before punctuated marks at word ends
+	wordsString = myrow$Verbatim
+	wordsString  = gsub("[", " [", wordsString, fixed=TRUE)
+	wordsString  = gsub("", " ", wordsString, fixed=TRUE)
 
 	myrow$Gloss <- NA
 	words <- unlist(strsplit(wordsString, " "))
@@ -179,7 +176,7 @@ get_utt_info <- function(u){
 		#Did we hit a '@' char? 
 		if (gregexpr("[@&]", words[w])[[1]][1] > 0 ){
 			#Find where the word ends, then clean up
-            words[w] = substr(words[w], 1, gregexpr("[@&]", words[w])[[1]][1] - 1)
+			words[w] = substr(words[w], 1, gregexpr("[@&]", words[w])[[1]][1] - 1)
 		}
 		w <- w + 1	
 	}
@@ -190,18 +187,18 @@ get_utt_info <- function(u){
 		#Did we hit a '(' char? 
 		if (gregexpr("[(]", words[w])[[1]][1] > 0 ){
 			#Find where the word ends, then clean up
-            words[w] = paste(substr(words[w], 1, gregexpr("[(]", words[w])[[1]][1] - 1), 
-                             substr(words[w], gregexpr("[)]", words[w])[[1]][1] + 1, str_length(words[w])),
-                                sep="")
+				words[w] = paste(substr(words[w], 1, gregexpr("[(]", words[w])[[1]][1] - 1), 
+					substr(words[w], gregexpr("[)]", words[w])[[1]][1] + 1, str_length(words[w])),
+					sep="")
 		}
 		w <- w + 1	
 	}
-    w <- 1
+	w <- 1
 	wmax <- length(words) + 1
 	while (w < wmax){
 		#Did we hit a '' char?
 		if (gregexpr("", words[w])[[1]][1] > 0 ){
-            words[w] = ""
+			 words[w] = ""
 		}
 		w <- w + 1
 	}
@@ -214,11 +211,11 @@ get_utt_info <- function(u){
 	myrow$Gloss <- gsub("\"", "", myrow$Gloss)
 	myrow$Gloss <- gsub("\\\\", "", myrow$Gloss)
 	myrow$Gloss <- gsub("[ˈ↑↓⇗↗→↘⇘∞≈≋≡∙⌈⌉⌊⌋∆∇⁎⁇°◉▁▔☺∬Ϋ∲§∾↻Ἡ„‡ạʰāʔʕš“”/↑↓↫-]", "", myrow$Gloss)
-    myrow$Gloss  = gsub("\\>\\.", " .", myrow$Gloss )
-    myrow$Gloss  = gsub("\\>\\?", " ?", myrow$Gloss )
-    myrow$Gloss  = gsub("\\>\\!", " !", myrow$Gloss )
-    myrow$Gloss  = gsub("\\>\\,", " ,", myrow$Gloss )
-    myrow$Gloss <- str_squish(myrow$Gloss)
+	myrow$Gloss  = gsub("\\>\\.", " .", myrow$Gloss )
+	myrow$Gloss  = gsub("\\>\\?", " ?", myrow$Gloss )
+	myrow$Gloss  = gsub("\\>\\!", " !", myrow$Gloss )
+	myrow$Gloss  = gsub("\\>\\,", " ,", myrow$Gloss )
+	myrow$Gloss <- str_squish(myrow$Gloss)
 	
 	#Return
 	myrow
