@@ -110,7 +110,7 @@ get_utt_info <- function(u){
     #remove "[*]"
     u = gsub("\\[\\*\\]", "", u)
 	#Divide the line into individual utterances & tiers
-	fields <- unlist(strsplit(u, "\n%", fixed=TRUE))
+	fields <- unlist(strsplit(u, "\n%|\n@"))
 	#Make a dataframe
 	myrow <- data.frame(t(as.matrix(fields)))
 	
@@ -118,13 +118,17 @@ get_utt_info <- function(u){
     divloc = gregexpr(":", fields[1])[[1]][1] - 1
 	myrow$Speaker <- substr(fields[1], 1, divloc)
 	myrow$Verbatim <- substr(fields[1], divloc + 3, nchar(fields[1]))
+    myrow$Gloss <- NA
 	
 	#Add info from any tiers, as they appear in the file
 	if (length(fields) > 1){
 		for (j in 2:length(fields)){
-			tier <- data.frame(substr(fields[j], 6,nchar(fields[j])))
-			names(tier) <- c(substr(fields[j], 1,3))
-			myrow <- cbind(myrow, tier)
+            divloc = gregexpr(":", fields[j])[[1]][1] - 1
+            if (divloc > 0) {
+                tier <- data.frame(substr(fields[j], divloc + 3, nchar(fields[j])))
+                names(tier) <- c(substr(fields[j], 1, divloc))
+                myrow <- cbind(myrow, tier)
+            }
 		}
 	}
 	
@@ -135,6 +139,7 @@ get_utt_info <- function(u){
 
 
     wordsString  = gsub("[", " [", wordsString, fixed=TRUE)
+    wordsString  = gsub("", " ", wordsString, fixed=TRUE)
 
 	myrow$Gloss <- NA
 	words <- unlist(strsplit(wordsString, " "))
@@ -191,14 +196,14 @@ get_utt_info <- function(u){
 		}
 		w <- w + 1	
 	}
-	w <- 1
+    w <- 1
 	wmax <- length(words) + 1
 	while (w < wmax){
-		#Did we hit a '' char? 
+		#Did we hit a '' char?
 		if (gregexpr("", words[w])[[1]][1] > 0 ){
             words[w] = ""
 		}
-		w <- w + 1	
+		w <- w + 1
 	}
 	
 	myrow$Gloss <- paste(words, collapse=" ")
