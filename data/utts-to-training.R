@@ -2,12 +2,12 @@
 ## Gathers the data and splits it into training, validation, and test 
 ## sets. 
 ##
-## Produces directory split-data, containing output.txt, train.txt,  
+## Produces directory data-split, containing output.txt, train.txt,  
 ## valid.txt, and test.txt. Additionally produces processed file
 ## gloss-and-filename.txt, for the purpose of making things run faster
 ## the second time around. 
 ##
-## Steps: 1) Gather the non-child utterances (sentence) and the name of 
+## Steps: 1) Load the non-child utterances (sentence) and the name of 
 ##           the files they came from. 
 ##        2) Shuffel by filename
 ##        2) Create a map from file name to number of utterances. 
@@ -27,27 +27,11 @@
 ########################################################################
 
 library(stringr)
-
-
-if (!file.exists("gloss-and-filename.txt")) {
-    print("====gathering data====")
-    file.create("gloss-and-filename.txt")
-    paths = list.files("processed", full.names=TRUE)
-    for (p in paths) {
-        print(p)
-        utts<-read.table(file=p, header=TRUE)
-        utts<-utts[,c("Speaker", "Gloss", "Filename")]
-        utts<-utts[!(utts$Speaker=="CHI"),]
-        utts<-utts[!(str_length(utts$Speaker)>5),]
-        utts<-utts[!(str_length(utts$Gloss)==1),]
-        w = utts[,c("Gloss", "Filename")]
-        write.table(w, file="gloss-and-filename.txt", sep="\t", 
-                    col.names=FALSE, row.names=FALSE, quote=FALSE, append=TRUE)
-    }
-    print("gloss-and-filename.txt")
-}
 library(dplyr)
 
+if (!file.exists("gloss-and-filename.txt")) {
+    source('get-utterance.R')
+}
 
 print("====reading data====")
 data <- read.delim(file="gloss-and-filename.txt", header=FALSE)
@@ -81,20 +65,20 @@ colnames(data) <- c("Filename", "Gloss", "Freq", "Set")
 file.remove("tmp.txt")
 
 print("====saving data====")
-if(!dir.exists("split-data"))
-   dir.create("split-data")
-write.table(data[,c("Gloss", "Filename", "Set")], file="split-data/split.txt", 
+if(!dir.exists("data-split"))
+   dir.create("data-split")
+write.table(data[,c("Gloss", "Filename", "Set")], file="data-split/split.txt", 
             sep="\t", col.names=FALSE, row.names=FALSE, quote=FALSE, append=FALSE)
-print("split-data/split.txt")
-write.table(data[,"Gloss"], file="split-data/output.txt", sep="\t", 
+print("data-split/split.txt")
+write.table(data[,"Gloss"], file="data-split/output.txt", sep="\t", 
             col.names=FALSE, row.names=FALSE, quote=FALSE, append=FALSE)
-print("split-data/output.txt")
-write.table(subset(data, Set=="train")[,"Gloss"], file="split-data/train.txt", 
+print("data-split/output.txt")
+write.table(subset(data, Set=="train")[,"Gloss"], file="data-split/train.txt", 
             sep="\t", col.names=FALSE, row.names=FALSE, quote=FALSE, append=FALSE)
-print("split-data/train.txt")
-write.table(subset(data, Set=="valid")[,"Gloss"], file="split-data/valid.txt", 
+print("data-split/train.txt")
+write.table(subset(data, Set=="valid")[,"Gloss"], file="data-split/valid.txt", 
             sep="\t", col.names=FALSE, row.names=FALSE, quote=FALSE, append=FALSE)
-print("split-data/valid.txt")
-write.table(subset(data, Set=="test")[,"Gloss"], file="split-data/test.txt", 
+print("data-split/valid.txt")
+write.table(subset(data, Set=="test")[,"Gloss"], file="data-split/test.txt", 
             sep="\t", col.names=FALSE, row.names=FALSE, quote=FALSE, append=FALSE)
-print("split-data/test.txt")
+print("data-split/test.txt")
