@@ -24,7 +24,7 @@ for (p in c("tests") ) { # for testing purposes
     ###################################################
 
     #Save the output file in in processed directory
-    out_filename = paste(gsub("/", "-", p), "-results.txt", sep="")
+    out_filename = "results.txt" #paste(gsub("/", "-", p), "-results.txt", sep="")
     file.create(out_filename)
     #this gives you an excel-style file with as many columns as column names)
     write.table(mydata, file=out_filename, sep="\t", col.names = NA)
