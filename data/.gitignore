@@ -1,4 +1,6 @@
 childes
 processed
-split-data
+data-split*
 gloss-and-filename.txt
+results.txt
+output.txt
