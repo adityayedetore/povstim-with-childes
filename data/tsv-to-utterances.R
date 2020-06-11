@@ -14,6 +14,13 @@
 
 library(stringr)
 
+is_child <- function(row) {
+    s = str_trim(row["Speaker"])
+    p = trimws(strsplit(row["Participants"], " , "))
+    search_string = paste(s, ".*Target_Child", sep="")
+    sum(grepl(search_string, p)) > 0
+}
+
 print("====gathering data====")
 file.create("gloss-and-filename.txt")
 file.create("output.txt")
@@ -21,8 +28,8 @@ paths = list.files("processed", full.names=TRUE)
 for (p in paths) {
     print(p)
     utts<-read.table(file=p, header=TRUE)
-    utts<-utts[,c("Speaker", "Gloss", "Filename")]
-    utts<-utts[!(utts$Speaker=="CHI"),]
+    utts<-utts[,c("Speaker", "Gloss", "Filename", "Participants")]
+    utts<-utts[!apply(utts, 1, is_child),]
     utts<-utts[!(str_length(utts$Speaker)>5),]
     utts<-utts[!(str_length(utts$Gloss)<=1),]
     w = utts[,c("Gloss", "Filename")]
