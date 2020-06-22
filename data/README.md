@@ -27,3 +27,24 @@ The code for transforming the data from CHAT transcription to normal text has be
 
 
 [CHAT Transcription Format Guide](https://talkbank.org/manuals/CHAT.html#_Toc33781487) has information about the meanings of the marks in the CHAT format.  This is the citation they would like us to use: MacWhinney, B. (2000). The CHILDES project: Tools for analyzing talk. 3rd edition. Mahwah, NJ: Lawrence Erlbaum Associates.
+
+### Full description of data gathering process
+
+1. Downloaded (almost) all the data from the Eng-NA corpora. 
+  - Didn't use one of them, it wasn't available last time I checked
+
+2. Cleaned the data 
+  - Removed all the transcription marks 
+  - Removed all utterances of length 1 or 0 chars  
+  - Removed all utterances by target children 
+
+3. Tested the scripts, checked the data
+  - Tests can be found in `tests` directory. 
+
+4. Split the data
+    1. Gather the non-child utterances and corresponding filenames.
+    2. Shuffel by filename. 
+    3. Create a map from file name to number of utterances.
+    4. Order map by number of utterances. 
+    5. Iterate through sets of n (=30) file names in map, randomly assign one to the validation set, another to the test set, and leave the remainder for the training set.
+    6. Split data by assignments. 
