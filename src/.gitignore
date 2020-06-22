@@ -1,3 +1,6 @@
 *.pt
 __pycache__
 CHILDES
+gen-sents.csv
+*.pkl
+*~*
