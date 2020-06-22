@@ -87,6 +87,7 @@
 *MOT:	comma with word split, test .
 *MOT:	question mark with word split test?
 *MOT:	question mark with word end ⌊test⌋?
+*MOT:	filler &-kept &-test .
 @New Episode
 *MOT:	New Episode marker ignored test
 *MOT:	End marker ignored test
