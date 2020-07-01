@@ -172,6 +172,7 @@ get_utt_info <- function(u){
 		w <- w + 1	
 	}
 
+
 	#Next, find & replace notes like this : "test@dog " -> "test" or "test&dog " -> "test"
 	w <- 1
 	wmax <- length(words) + 1
