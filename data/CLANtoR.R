@@ -157,46 +157,6 @@ get_utt_info <- function(u){
 		words <- c("")
 	}
 
-	#Next, find & replace clarification/elaboration sequences like this: "a bobby [= a thin bobbypin]" -> "a bobby"
-	w <- 1
-	wmax <- length(words) + 1
-	while (w < wmax){
-		#Did we hit a gloss sequence?
-		if ((substr(words[w],1,1) == "[")){
-			#Find where the gloss ends, then clean up
-			closebracket <- grep("]",  words[w:length(words)], fixed=TRUE)[1] + (w-1)
-			for (v in w:closebracket){
-				words[v] <- ""
-			}
-		}
-		w <- w + 1	
-	}
-
-
-	#Next, find & replace notes like this : "test@dog " -> "test" or "test&dog " -> "test"
-	w <- 1
-	wmax <- length(words) + 1
-	while (w < wmax){
-		#Did we hit a '@' char? 
-		if (gregexpr("[@&]", words[w])[[1]][1] > 0 ){
-			#Find where the word ends, then clean up
-			words[w] = substr(words[w], 1, gregexpr("[@&]", words[w])[[1]][1] - 1)
-		}
-		w <- w + 1	
-	}
-	#Next, find & replace stuff like this : "te(dog)st " -> "test"
-	w <- 1
-	wmax <- length(words) + 1
-	while (w < wmax){
-		#Did we hit a '(' char? 
-		if (gregexpr("[(]", words[w])[[1]][1] > 0 ){
-			#Find where the word ends, then clean up
-				words[w] = paste(substr(words[w], 1, gregexpr("[(]", words[w])[[1]][1] - 1), 
-					substr(words[w], gregexpr("[)]", words[w])[[1]][1] + 1, str_length(words[w])),
-					sep="")
-		}
-		w <- w + 1	
-	}
 	w <- 1
 	wmax <- length(words) + 1
 	while (w < wmax){
@@ -206,20 +166,30 @@ get_utt_info <- function(u){
 		}
 		w <- w + 1
 	}
+
+    words <- paste(words, collapse=" ")
+
+	#Next, find & remove clarification/elaboration sequences like this "the [= hot] dog" -> "the dog"
+    words <- gsub("[[][^]]*[]]", "", words)
+
+	#Next, find & replace notes like this : "test@dog " -> "test" or "test&dog " -> "test"
+    words <- gsub("[@]\\S*", "", words)
+
+	#Next, find & replace stuff like this : "te(dog)st " -> "test"
+    words <- gsub("[(][^)]*[)]", "", words)
 	
-	myrow$Gloss <- paste(words, collapse=" ")
-	myrow$Gloss <- gsub(" +", " ", myrow$Gloss, fixed=TRUE)
-	myrow$Gloss <- gsub("[];0()<>&@:\\+\\^]", "", myrow$Gloss)
-	myrow$Gloss <- gsub("_", " ", myrow$Gloss, fixed=TRUE)
-	myrow$Gloss <- gsub("/", "", myrow$Gloss, fixed=TRUE)
-	myrow$Gloss <- gsub("\"", "", myrow$Gloss)
-	myrow$Gloss <- gsub("\\\\", "", myrow$Gloss)
-	myrow$Gloss <- gsub("[ˈ↑↓⇗↗→↘⇘∞≈≋≡∙⌈⌉⌊⌋∆∇⁎⁇°◉▁▔☺∬Ϋ∲§∾↻Ἡ„‡ạʰāʔʕš“”/↑↓↫-]", "", myrow$Gloss)
-	myrow$Gloss  = gsub("\\>\\.", " .", myrow$Gloss )
-	myrow$Gloss  = gsub("\\>\\?", " ?", myrow$Gloss )
-	myrow$Gloss  = gsub("\\>\\!", " !", myrow$Gloss )
-	myrow$Gloss  = gsub("\\>\\,", " ,", myrow$Gloss )
-	myrow$Gloss <- str_squish(myrow$Gloss)
+	words <- gsub(" +", " ", words, fixed=TRUE)
+	words <- gsub("[];0()<>&@:\\+\\^]", "", words)
+	words <- gsub("_", " ", words, fixed=TRUE)
+	words <- gsub("/", "", words, fixed=TRUE)
+	words <- gsub("\"", "", words)
+	words <- gsub("\\\\", "", words)
+	words <- gsub("[ˈ↑↓⇗↗→↘⇘∞≈≋≡∙⌈⌉⌊⌋∆∇⁎⁇°◉▁▔☺∬Ϋ∲§∾↻Ἡ„‡ạʰāʔʕš“”/↑↓↫-]", "", words)
+	words  = gsub("\\>\\.", " .", words )
+	words  = gsub("\\>\\?", " ?", words )
+	words  = gsub("\\>\\!", " !", words )
+	words  = gsub("\\>\\,", " ,", words )
+	myrow$Gloss <- str_squish(words)
 	
 	#Return
 	myrow
