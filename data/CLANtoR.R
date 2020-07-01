@@ -180,6 +180,9 @@ get_utt_info <- function(u){
 
     #Next, remove all unnecessary characters
     words <- gsub("[^[:alpha:][:space:].!?,]", "", words)
+
+    #Next, remove accented characters
+    words <- gsub("[ΫἩạāʔʕš]", "", words)
 	
     #Next, split punctuation from words
 	words  = gsub("\\>\\.", " .", words )
