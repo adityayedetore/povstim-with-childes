@@ -15,80 +15,135 @@
 @Date:	04-JUL-1979 
 @Situation:	Fourth of July in Denver 
 @Bg:	mother_freeplay
-*CHI:	basic utterance test . 
-*MOT:	other tier info test for mor, gpx, gra . 
+*CHI:	the dog buried the bone .
+@Test:	basic utterance 
+*MOT:	the dog buried the bone . 
+@Test:	other tier info test for mor, gpx, gra
 %mor:	mor|test
 %gpx:	gpx text
 %gra:	gra text
-*MOT:	other tier info test for mor, gpx . 
+*MOT:	the dog buried the bone . 
+@Test:	other tier info test for mor, gpx 
 %mor:	mor|test
 %gpx:	gpx text
-*MOT:	other tier info test for mor . 
+*MOT:	the dog buried the bone . 
+@Test:	other tier info test for mor . 
 %mor:	mor|test
-*FAT:	comment formatting test .
+*FAT:	the dog buried the bone .
+@Test:	comment formatting 
 @Comment:	this is a comment
-*FAT:	double comment test . 
+*FAT:	the dog buried the bone .
+@Test:	double comment  
 @Comment:	first comment 
 @Comment:	second comment 
-*MOT:	double brackets first test [* dog] [% dog] .
-*MOT:	double brackets second test  [% dog] [=? dog] .
-*MOT:	noncompleation of word deleted te(dog)st .
-*MOT:	question mark should be kept test ? 
-*MOT:	comma should be kept test , . 
-*MOT:	period should be kept test . 
-*MOT:	quick uptake deleted test . +^
-*MOT:	special form markers deleted test@a .
-*MOT:	unintelligible kept empty sentence xxx .
-*MOT:	untranscribed material kept test  www .
-*MOT:	phonological coding kept test yyy .
-*MOT:	phonological fragments deleted test&dog .
-*MOT:	omitted content deleted test 0 .
-*MOT:	prolongation deleted test : .
-*MOT:	special characters deleted test ↑ ↓ ⇗ ↗ → ↘ ⇘ ∞ ≈ ≋ ≡ ∙ ⌈ ⌉ ⌊ ⌋ ∆ ∇ ⁎ ⁇ ° ◉ .
-*MOT:   special characters deleted test cont ▁ ▔ ☺ ∬ Ϋ ∲ § ∾ ↻ Ἡ „ ‡ ạ ʰ ā ʔ ʕ š “ ” .
-*MOT:   special characters in word deleted test⌋ .  
-*MOT:   special characters in word deleted test↑ .  
-*MOT:   special characters in word deleted↑ test cont .  
-*MOT:   special characters in word deleted test /.  
-*MOT:   quotation mark at end deleted test ".  
-*MOT:	repetition deleted test [//] .
-*MOT:	retracing deleted test [/] .
-*MOT:	repetition deleted test[//] .
-*MOT:	retracing deleted test[/] .
-*MOT:	error replacement test [: dog] .
-*MOT:	elaboration replacement deleted test [= dog] .
-*MOT:	short pause deleted test (.) .
-*MOT:	mid pause deleted test (..) .
-*MOT:	long pause deleted test (...) .
-*MOT:	uncertain deleted test[?] .
-*MOT:	trailing off leave dot dot dot test +...
-*MOT:	syntactic structures deleted test ; .
-*MOT:	comment deleted test [% dog] [% text] .
-*MOT:	best guess mark deleted test [?] .
-*MOT:	unclear marks deleted <test> .
-*MOT:	overlap deleted test [>] [<] .
-*MOT:	note about laugh deleted [=! laughing] test .
-*MOT:	note about laugh deleted[=! laughing] test .
-*MOT:	anything between brackets deleted test [a dog ate a bone] .
-*MOT:	strange symbol test 1335 .
-*MOT:	strange symbol connected test .1335
-*MOT:	slash test /\ / \ .
-*MO:	short identifier check test .
-*MOTH:	long identifier check test .
-*MO:	no break for extra star [*] test .
-*MOT:	continues after line end 
-	with tab test .
-*MOT:	multiline continuation 
-	cont
-	cont
-	cont
-	test . 
-*MOT:	period with word split test. 
-*MOT:	comma with word split, test .
-*MOT:	question mark with word split test?
-*MOT:	question mark with word end ⌊test⌋?
-*MOT:	filler &-kept &-test .
+*MOT:	the dog buried the bone [* dog] [% dog] .
+@Test:	double brackets 
+*MOT:	the dog buried the bone [% dog] [=? dog] .
+@Test:	double brackets 
+*MOT:	the dog buried the bo(dog)ne .
+@Test:	noncompleation of word deleted 
+*MOT:	the dog buried the bone . +^
+@Test:	quick uptake deleted 
+*MOT:	the dog buried the bone@a .
+@Test:	special form markers deleted 
+*MOT:	the dog buried the bone&dog .
+@Test:	phonological fragments deleted 
+*MOT:	the dog buried the bone 0 . 
+@Test:	omitted content deleted test 0 .
+*MOT:	the dog buried the bone: .
+@Test:	prolongation deleted test : .
+*MOT:	the dog buried the bone ↑ ↓ ⇗ ↗ → ↘ ⇘ ∞ ≈ ≋ ≡ ∙ ⌈ ⌉ ⌊ ⌋ ∆ ∇ ⁎ ⁇ ° ◉ .
+@Test:	special characters deleted 
+*MOT:	the dog buried the bone ▁ ▔ ☺ ∬ Ϋ ∲ § ∾ ↻ Ἡ „ ‡ ạ ʰ ā ʔ ʕ š “ ” .
+@Test:	special characters deleted cont
+*MOT:	the dog buried the bone⌋ .
+@Test:	special characters in word deleted test
+*MOT:	the dog buried the↑ bone . 
+@Test:	special characters in word deleted test
+*MOT:	the dog buried the bone↑ 
+@Test:	special characters in word deleted
+*MOT:	the dog buried the bone /.
+@Test:	special characters in word deleted 
+*MOT:	the dog buried the bone ".
+@Test:	quotation mark at end deleted 
+*MOT:	the dog buried the bone [//] .
+@Test:	repetition deleted 
+*MOT:	the dog buried the bone [/] .
+@Test:	retracing deleted 
+*MOT:	the dog buried the bone[//] .
+@Test:	repetition deleted 
+*MOT:	the dog buried the bone[/] .
+@Test:	retracing deleted 
+*MOT:	the dog buried the bone [: dog] .
+@Test:	error replacement deleted
+*MOT:	the dog buried the bone [= dog] .
+@Test:	elaboration replacement deleted 
+*MOT:	the dog buried the bone (.) .
+@Test:	short pause replaced with sPAUSE 
+*MOT:	the dog buried the bone (..) .
+@Test:	mid pause replaced with mPAUSE
+*MOT:	the dog buried the bone (...) . 
+@Test:	long pause replaced with lPAUSE
+*MOT:	the dog buried the bone[?] .
+@Test:	uncertain deleted 
+*MOT:	the dog buried the bone ; .
+@Test:	syntactic structures deleted 
+*MOT:	the dog buried the bone [% dog] [% dog] .
+@Test:	comment deleted 
+*MOT:	the dog buried the bone [?] .
+@Test:	best guess mark deleted 
+*MOT:	the dog buried the <bone> .
+@Test:	unclear marks deleted 
+*MOT:	the dog buried the bone [>] [<] .
+@Test:	overlap deleted test 
+*MOT:	the dog buried the bone [=! dog] .
+@Test:	note about laugh deleted 
+*MOT:	the dog buried the bone[=! dog] .
+@Test:	note about laugh deleted
+*MOT:	the dog buried the bone [dog dog dog dog] .
+@Test:	anything between brackets deleted 
+*MOT:	the dog buried the bone 1335 .
+@Test:	strange symbol deleted
+*MOT:	the dog buried the bone .1335
+@Test:	strange symbol connected 
+*MOT:	the dog buried the bone /\ / \ .
+@Test:	slash test /\ / \ .
+*MO:	the dog buried the bone .
+@Test:	short identifier 
+*MOTH:	the dog buried the bone .
+@Test:	long identifier 
+*MO:	the dog buried the bone [*] .
+@Test:	no break for extra star 
+*MOT:	the dog buried the 
+	bone .
+@Test:	continues after line end with tab
+*MOT:	the dog
+	buried the
+	bone . 
+@Test:	multiline continuation 
+*MOT:	the dog buried the bone. 
+@Test:	period with word split 
+*MOT:	the dog buried &-the &-bone 
+@Test:	filler &-kept &-test .
 @New Episode
-*MOT:	New Episode marker ignored test
-*MOT:	End marker ignored test
+*MOT:	the dog buried the bone .
+@Test:	New Episode marker ignored test
+*MOT:	the dog buried the bone .
+@Test:	End marker ignored test
 @End
+*MOT:	the dog buried the bone , .
+@Test:	comma should be kept 
+*MOT:	the dog buried xxx bone . 
+@Test:	unintelligible kept empty sentence xxx 
+*MOT:	the dog buried www bone .
+@Test:	untranscribed material kept test  www 
+*MOT:	the dog buried yyy bone .
+@Test:	phonological coding kept test yyy 
+*MOT:	the dog buried the bone +...
+@Test:	trailing off leave dot dot dot 
+*MOT:	the dog buried the bone, .
+@Test:	comma with word split
+*MOT:	the dog buried the bone? 
+@Test:	question mark with word split test?
+*MOT:	the dog buried the ⌊bone⌋?
+@Test:	question mark with word end 
