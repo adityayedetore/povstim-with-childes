@@ -132,11 +132,14 @@ get_utt_info <- function(u){
 	}
 	
 	#The rest is to clean up the gloss
+	wordsString = myrow$Verbatim
 
 	# Add a space before punctuated marks at word ends
-	wordsString = myrow$Verbatim
-	wordsString  = gsub("[", " [", wordsString, fixed=TRUE)
-	wordsString  = gsub("", " ", wordsString, fixed=TRUE)
+	wordsString = gsub("[", " [", wordsString, fixed=TRUE)
+	wordsString = gsub("", " ", wordsString, fixed=TRUE)
+
+    # Keep filler words, marked by &-, by removing &- mark
+    wordsString = gsub("&-", "", wordsString, fixed=TRUE)
 
 	myrow$Gloss <- NA
 	words <- unlist(strsplit(wordsString, " "))
