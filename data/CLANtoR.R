@@ -173,18 +173,15 @@ get_utt_info <- function(u){
     words <- gsub("[[][^]]*[]]", "", words)
 
 	#Next, find & replace notes like this : "test@dog " -> "test" or "test&dog " -> "test"
-    words <- gsub("[@]\\S*", "", words)
+    words <- gsub("[@&]\\S*", "", words)
 
 	#Next, find & replace stuff like this : "te(dog)st " -> "test"
     words <- gsub("[(][^)]*[)]", "", words)
+
+    #Next, remove all unnecessary characters
+    words <- gsub("[^[:alpha:][:space:].!?,]", "", words)
 	
-	words <- gsub(" +", " ", words, fixed=TRUE)
-	words <- gsub("[];0()<>&@:\\+\\^]", "", words)
-	words <- gsub("_", " ", words, fixed=TRUE)
-	words <- gsub("/", "", words, fixed=TRUE)
-	words <- gsub("\"", "", words)
-	words <- gsub("\\\\", "", words)
-	words <- gsub("[ˈ↑↓⇗↗→↘⇘∞≈≋≡∙⌈⌉⌊⌋∆∇⁎⁇°◉▁▔☺∬Ϋ∲§∾↻Ἡ„‡ạʰāʔʕš“”/↑↓↫-]", "", words)
+    #Next, split punctuation from words
 	words  = gsub("\\>\\.", " .", words )
 	words  = gsub("\\>\\?", " ?", words )
 	words  = gsub("\\>\\!", " !", words )
