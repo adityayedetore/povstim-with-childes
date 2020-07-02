@@ -201,6 +201,13 @@ get_utt_info <- function(u){
 	words  = gsub("\\>\\?", " ?", words )
 	words  = gsub("\\>\\!", " !", words )
 	words  = gsub("\\>\\,", " ,", words )
+
+    #Next, replace pauses with original markers: sPAUSE -> (.), mPAUSE -> (..), and lPAUSE -> (...),
+    words <- gsub("sPAUSE", "(.)", words, fixed=TRUE)
+    words <- gsub("mPAUSE", "(..)", words, fixed=TRUE)
+    words <- gsub("lPAUSE", "(...)", words, fixed=TRUE)
+
+    #Next, remove the extra space between words
 	myrow$Gloss <- str_squish(words)
 	
 	#Return
