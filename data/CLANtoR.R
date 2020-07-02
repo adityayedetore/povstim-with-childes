@@ -138,8 +138,20 @@ get_utt_info <- function(u){
 	wordsString = gsub("[", " [", wordsString, fixed=TRUE)
 	wordsString = gsub("", " ", wordsString, fixed=TRUE)
 
+    # Replace pauses 
+    wordsString <- gsub("(.)", "sPAUSE", wordsString, fixed=TRUE)
+    wordsString <- gsub("(..)", "mPAUSE", wordsString, fixed=TRUE)
+    wordsString <- gsub("(...)", "lPAUSE", wordsString, fixed=TRUE)
+
     # Keep filler words, marked by &-, by removing &- mark
     wordsString = gsub("&-", "", wordsString, fixed=TRUE)
+
+    # Remove interruption mark 
+    wordsString = gsub("+,", "", wordsString, fixed=TRUE)
+
+    # Deal with speech noises like &aw
+    wordsString = gsub("(?<=[[:space:]])&(?=[[:alpha:]])", "", wordsString, perl=TRUE)
+    wordsString = gsub("^&(?=[[:alpha:]])", "", wordsString, perl=TRUE)
 
 	myrow$Gloss <- NA
 	words <- unlist(strsplit(wordsString, " "))
