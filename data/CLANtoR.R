@@ -1,13 +1,10 @@
 ###############################################################
 ## Adapted from Melissa's R converter for CHILDES-CLAN files. 
-## There were meny errors in the creation of the Gloss, 
+## There were many errors in the creation of the Gloss, 
 ## I have attempted to fix them. 
 ## For all the Eng-NA corpora, it takes ~2 hours
 ##
-## Note that the part I've changed most is the processing of
-## the Gloss. Before it was seperated into Gloss and 
-## CleanGloss, now there is only Gloss. Also, this code will 
-## not do any of the replacements of the origonal code. 
+## The code is horrendously slow, but it gets the job done. 
 ## 
 ## Below are the Melissa's original comments
 ##
