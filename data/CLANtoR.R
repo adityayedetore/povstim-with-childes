@@ -188,7 +188,7 @@ get_utt_info <- function(u){
     words <- gsub("[(][^)]*[)]", "", words)
 
     #Next, remove all unnecessary characters
-    words <- gsub("[^[:alpha:][:space:].!?,]", "", words)
+    words <- gsub("[^[:alpha:][:space:].!?,']", "", words)
 
     #Next, remove accented characters
     words <- gsub("[ΫἩạāʔʕš]", "", words)
