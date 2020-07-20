@@ -204,6 +204,9 @@ get_utt_info <- function(u){
     words <- gsub("mPAUSE", "(..)", words, fixed=TRUE)
     words <- gsub("lPAUSE", "(...)", words, fixed=TRUE)
 
+    #Next, seperate possesive from word like this : "dog's" -> "dog 's"
+    words <- gsub("'s", " 's", words, fixed=TRUE)
+
     #Next, remove the extra space between words
 	myrow$Gloss <- str_squish(words)
 	
