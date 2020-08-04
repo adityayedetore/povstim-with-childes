@@ -58,12 +58,17 @@ List of the documents I checked:
   - &aw , sweetie . -> , sweetie .
 * childes/Brent/c1/000930.cha 1000 / 168042
 
-* childes/Brown/Adam/020304.cha
+* childes/Brown/Adam/020304.cha 1737 / 184640
   - Hum(pty)z_Dum(pty) .	Humz Dumpty .
+  - +, sand . ->	, sand .
+
+* childes/Carterette/third.cha 500 / 8000
+
+* childes/Clark/020216.cha 
 
 Stuff to change: 
 
-* find and replace (.) with PAUSE, (..) with PAUSE2, etc. 
+* find and replace (.) with sPAUSE, (..) with mPAUSE, and (...) with lPAUSE
 * Remove &-
 * Find and remove +, 
 * maybe deal with (a)n(d)
@@ -72,6 +77,7 @@ Stuff to change:
 * Maybe deal with 0word meaning omitted word (probably not)
 * Figure out what to do with just & as in &aw
 * Underscores should removed prior. In general remove the superfluous stuff first. 
+* deal with +,
 
 ### Sanity Tests
 

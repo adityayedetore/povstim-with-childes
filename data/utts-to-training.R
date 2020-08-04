@@ -37,17 +37,30 @@ print("====reading data====")
 data <- read.delim(file="gloss-and-filename.txt", header=FALSE)
 colnames(data) <- c("Gloss", "Filename")
 
-print("====assigning data====")
+print("====randomly assigning data====")
 h <- as.data.frame(table(data$Filename))
 h <- h[order(-h$Freq),]
 Set <- rep("train", nrow(h))
 n <- 30
+
 for (i in seq(0, nrow(h) - n, n)) {
     s <- sample(1:n, 2, replace=FALSE)
     Set[s[1] + i] <- "valid"
     Set[s[2] + i] <- "test"
 }
 h$Set <- Set
+
+print("====excluding tune files====")
+exclude <-read.delim(file="tune/exclude.txt", header=FALSE)
+for (i in seq(1, length(h$Var1))) {
+    if (h$Var1[i] %in% exclude$V1) {
+        if (i %% 2 == 0) 
+            h$Set[i] = "test"
+        else 
+            h$Set[i] = "valid"
+    }
+}
+
 data <- merge(data, h, by.x = "Filename", by.y = "Var1", all.x = TRUE, all.y = FALSE)
 
 print("====shuffling data====")

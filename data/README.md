@@ -48,3 +48,12 @@ The code for transforming the data from CHAT transcription to normal text has be
     4. Order map by number of utterances. 
     5. Iterate through sets of n (=30) file names in map, randomly assign one to the validation set, another to the test set, and leave the remainder for the training set.
     6. Split data by assignments. 
+
+### Exclusions for seq2seq
+
+The questions in the test set for the seq2seq fine tuning need to be excluded from the training set. The code used to find and exclude the files with those questions is in `tune`.
+
+*IMPORTANT*: I need to make clear (and automatic) the intermediate step of removing the files in the seq2seq test set. 
+
+### Notes
+* The transcriptions in CHILDES do no decompose contractions, but the CHILDES treebank does. I have to go in and account for this. 

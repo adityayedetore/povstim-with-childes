@@ -191,7 +191,7 @@ get_utt_info <- function(u){
     words <- gsub("[^[:alpha:][:space:].!?,']", "", words)
 
     #Next, remove accented characters
-    words <- gsub("[ΫἩạāʔʕš]", "", words)
+    words <- gsub("[ΫἩạāʔʕšˈ]", "", words)
 	
     #Next, split punctuation from words
 	words  = gsub("\\>\\.", " .", words )
@@ -200,12 +200,20 @@ get_utt_info <- function(u){
 	words  = gsub("\\>\\,", " ,", words )
 
     #Next, replace pauses with original markers: sPAUSE -> (.), mPAUSE -> (..), and lPAUSE -> (...),
-    words <- gsub("sPAUSE", "(.)", words, fixed=TRUE)
-    words <- gsub("mPAUSE", "(..)", words, fixed=TRUE)
-    words <- gsub("lPAUSE", "(...)", words, fixed=TRUE)
+    words <- gsub("sPAUSE", "(.) ", words, fixed=TRUE)
+    words <- gsub("mPAUSE", "(..) ", words, fixed=TRUE)
+    words <- gsub("lPAUSE", "(...) ", words, fixed=TRUE)
 
     #Next, seperate possesive from word like this : "dog's" -> "dog 's"
     words <- gsub("'s", " 's", words, fixed=TRUE)
+
+    #Next, seperate contractions. 
+    words <- gsub("n't", " n't", words, fixed=TRUE)
+    words <- gsub("'re", " 're", words, fixed=TRUE)
+    words <- gsub("'ll", " 'll", words, fixed=TRUE)
+    words <- gsub("'m", " 'm", words, fixed=TRUE)
+    words <- gsub("'ve", " 've", words, fixed=TRUE)
+    words <- gsub("'d", " 'd", words, fixed=TRUE)
 
     #Next, remove the extra space between words
 	myrow$Gloss <- str_squish(words)
