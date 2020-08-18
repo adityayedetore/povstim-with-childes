@@ -14,6 +14,7 @@ import torch
 import torch.nn as nn
 
 from dictionary_corpus import Corpus
+import dictionary_corpus
 import model
 from lm_argparser import lm_parser
 from utils import repackage_hidden, get_batch, batchify
@@ -39,6 +40,9 @@ if torch.cuda.is_available():
 # Load data
 ###############################################################################
 
+
+dictionary = dictionary_corpus.Dictionary(args.data)
+
 logging.info("Loading data")
 start = time.time()
 corpus = Corpus(args.data)
@@ -48,9 +52,21 @@ logging.info("Vocab size %d", ntokens)
 
 logging.info("Batchying..")
 eval_batch_size = 10
-train_data = batchify(corpus.train, args.batch_size, args.cuda)
-val_data = batchify(corpus.valid, eval_batch_size, args.cuda)
-test_data = batchify(corpus.test, eval_batch_size, args.cuda)
+
+def split_data_by_sentence(test_list, v=dictionary.word2idx["?"]):
+    # using list comprehension + zip() + slicing + enumerate()
+    # Split list into lists by particular value
+    size = len(test_list)
+    idx_list = [idx + 1 for idx, val in
+                enumerate(test_list) if val == v]
+    res = [test_list[i: j] for i, j in
+            zip([0] + idx_list, idx_list +
+            ([size] if idx_list[-1] != size else []))]
+    return res
+
+train_data = batchify(corpus.train, 1, args.cuda)
+val_data = batchify(corpus.valid, 1, args.cuda)
+test_data = batchify(corpus.test, 1, args.cuda)
 
 
 
@@ -82,12 +98,13 @@ def evaluate(data_source):
     # Turn on evaluation mode which disables dropout.
     model.eval()
     total_loss = 0
-    hidden = model.init_hidden(eval_batch_size)
 
     with torch.no_grad():
-        for i in range(0, data_source.size(0) - 1, args.bptt):
-            data, targets = get_batch(data_source, i, args.bptt)
-            #> output has size seq_length x batch_size x vocab_size
+        for sent in split_data_by_sentence(data_source):
+            data = sent[:-1]
+            targets = torch.flatten(sent[1:])
+            hidden = model.init_hidden(1)
+            hidden = repackage_hidden(hidden)
             output, hidden = model(data, hidden)
             #> output_flat has size num_targets x vocab_size (batches are stacked together)
             #> ! important, otherwise softmax computation (e.g. with F.softmax()) is incorrect
@@ -105,11 +122,14 @@ def train():
     total_loss = 0
     start_time = time.time()
 
-    hidden = model.init_hidden(args.batch_size)
 
-    for batch, i in enumerate(range(0, train_data.size(0) - 1, args.bptt)):
-        data, targets = get_batch(train_data, i, args.bptt)
-        # truncated BPP
+    batch = 0
+    for sent in split_data_by_sentence(train_data):
+        data = sent[:-1]
+        targets = torch.flatten(sent[1:])
+    #for batch, i in enumerate(range(0, train_data.size(0) - 1, args.bptt)):
+        #data, targets = get_batch(train_data, i, args.bptt)
+        hidden = model.init_hidden(1)
         hidden = repackage_hidden(hidden)
         model.zero_grad()
         output, hidden = model(data, hidden)
@@ -133,6 +153,8 @@ def train():
                 elapsed * 1000 / args.log_interval, cur_loss, math.exp(cur_loss)))
             total_loss = 0
             start_time = time.time()
+
+        batch += 1
 
 # Loop over epochs.
 lr = args.lr
