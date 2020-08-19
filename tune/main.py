@@ -124,7 +124,8 @@ def train():
 
 
     batch = 0
-    for sent in split_data_by_sentence(train_data):
+    split = split_data_by_sentence(train_data)
+    for sent in split:
         data = sent[:-1]
         targets = torch.flatten(sent[1:])
     #for batch, i in enumerate(range(0, train_data.size(0) - 1, args.bptt)):
@@ -147,9 +148,9 @@ def train():
         if batch % args.log_interval == 0 and batch > 0:
             cur_loss = total_loss / args.log_interval
             elapsed = time.time() - start_time
-            logging.info('| epoch {:3d} | {:5d}/{:5d} batches | lr {:02.2f} | ms/batch {:5.2f} | '
+            logging.info('| epoch {:3d} | {:5d}/{:5d} sentences | lr {:02.2f} | ms/sentence {:5.2f} | '
                     'loss {:5.2f} | ppl {:8.2f}'.format(
-                epoch, batch, len(train_data) // args.bptt, lr,
+                epoch, batch, len(split), lr,
                 elapsed * 1000 / args.log_interval, cur_loss, math.exp(cur_loss)))
             total_loss = 0
             start_time = time.time()
