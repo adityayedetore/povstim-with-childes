@@ -16,12 +16,12 @@ VP_M_P -> 'MAIN-AUX' Aux_P V_trans NP_O
 RC_S -> Rel Aux_S V_intrans | Rel Det N_S Aux_S V_trans | Rel Det N_P Aux_P V_trans | Rel Aux_S V_trans Det N
 RC_P -> Rel Aux_P V_intrans | Rel Det N_S Aux_S V_trans | Rel Det N_P Aux_P V_trans | Rel Aux_P V_trans Det N
 
-Det -> 'the'
-N_S -> 'dog'
-N_P -> 'dogs'
-V_intrans -> 'run'
-V_trans -> 'sniff'
-Aux_P -> 'do'
-Aux_S -> 'does'
-Prep -> 'around'
-Rel -> 'who'
+Det -> 'the' | 'some' | 'my' | 'your' | 'her' | 'our'
+N_S -> 'dog' | 'doll' | 'girl' | 'boy' | 'animal' | 'man' | 'person' | 'horse' | 'mouse' | 'kitty'
+N_P -> 'dogs' | 'dolls' | 'girls' | 'boys' | 'animals' | 'men' | 'people' | 'horses' | 'mouses' | 'kitties'
+V_intrans -> 'play' | 'read' | 'draw' | 'sit' | 'fall' | 'talk' | 'sleep' 
+V_trans -> 'like' | 'want' | 'see' | 'eat' | 'find' | 'help' | 'feed' | 'pull'
+Aux_P -> 'do' | 'did' | 'can' | 'would' | 'shall' | 'will' | 'should'
+Aux_S -> 'does' | 'did' | 'can' | 'would' | 'shall' | 'will' | 'should'
+Prep -> 'around' | 'with' | 'near' | 'by' | 'behind'
+Rel -> 'who' | 'that'
