@@ -49,3 +49,6 @@ lm_parser.add_argument('--save', type=str, default='model.pt',
                        help='path to save the final model')
 lm_parser.add_argument('--log', type=str, default='log.txt',
                        help='path to logging file')
+
+lm_parser.add_argument('--load', type=str, default='model.pt',
+                       help='path to load model')

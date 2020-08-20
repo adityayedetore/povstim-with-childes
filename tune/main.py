@@ -79,7 +79,7 @@ criterion = nn.CrossEntropyLoss()
 logging.info("Building the model")
 
 #model = model.RNNModel(args.model, ntokens, args.emsize, args.nhid, args.nlayers, args.dropout, args.tied)
-with open("model.pt", 'rb') as f:
+with open(args.load, 'rb') as f:
     import warnings
     warnings.filterwarnings("ignore")
     model = torch.load(f, map_location = lambda storage, loc: storage)
