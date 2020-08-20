@@ -16,15 +16,17 @@ def ambiguous(sent, keyword="MAIN-AUX"):
     main_aux = words[i]
     return words.index(main_aux) != i
 
-def gen(cfg_filename, output_filename): 
+def gen(cfg_filename, vocab_filename = "vocab-cfg.txt", output_filename): 
     print("reading from " + cfg_filename + " and printing to " + output_filename)
     with open(cfg_filename) as f:
-        cfg_string = f.read()
+        cfg_string = f.read() + "\n"
+    with open (vocab_filename) as f:
+        cfg_string += f.read()
     grammar = CFG.fromstring(cfg_string)
     gen = ""
     count = 0
     for sentence in generate(grammar, depth=5):
-        if count % 1000 == 0:
+        if count % 100000 == 0:
             print(str(count) + " done")
         gen += " ".join(sentence) + "\n"
     print("====done generating====")
@@ -33,7 +35,7 @@ def gen(cfg_filename, output_filename):
     gen_str = ""
     count = 0
     for sent in gen: 
-        if count % 1000 == 0:
+        if count % 100000 == 0:
             print(str(count) + " done")
         if (not ambiguous(sent)):
             gen_str += move(sent) + "\n"
@@ -43,5 +45,5 @@ def gen(cfg_filename, output_filename):
     with open(output_filename, "w") as f:
         f.write(gen_str)
 
-gen("test-cfg.txt", "decl-quest-test-set.txt")
-gen("gen-cfg.txt", "decl-quest-gen-set.txt")
+gen("test-cfg.txt", "decl-quest-test-set.txt~small")
+gen("gen-cfg.txt", "decl-quest-gen-set.txt~small")
