@@ -17,10 +17,12 @@ parser.add_argument('--eval', type=str, default="none",
         help='path to file to evaluate on')
 parser.add_argument('--model', type=str, default="model.pt",
         help="path to model to evaluate on")
-parser.add_argument('--shuffle', type=bool, default=True, 
-        help="shuffle the order of sentences")
+parser.add_argument('--results', type=str, default="results.txt", 
+        help="path to saved results")
 parser.add_argument('--n', type=int, default=1000,
         help="max sentences to evaluate on")
+parser.add_argument('--no-shuffle', action="store_true",
+        help="keep the order of sentences")
 parser.add_argument('--cuda', action='store_true',
                     help='use CUDA')
 args = parser.parse_args()
@@ -31,36 +33,37 @@ def auto_eval(dictionary, hidden, model):
     with open(args.eval, "r") as f:
         eva = f.readlines()
 
-    if args.shuffle: 
+    if not args.shuffle: 
         rand.shuffle(eva)
 
-    for line in eva:
-        total += 1
-        hidden = model.init_hidden(1)
-        words = line.split()
-        for i, word in enumerate(words[:words.index(".") + 1]):
-            if (word not in dictionary.word2idx):
-                word = "<unk>"
-            data = torch.tensor([[dictionary.word2idx[word]]])
-            output, hidden = model(data, hidden)
+    with open(args.results, 'w') as f:
+        for line in eva:
+            total += 1
+            hidden = model.init_hidden(1)
+            words = line.split()
+            for i, word in enumerate(words[:words.index(".") + 1]):
+                if (word not in dictionary.word2idx):
+                    word = "<unk>"
+                data = torch.tensor([[dictionary.word2idx[word]]])
+                output, hidden = model(data, hidden)
+    
+            o = output.numpy()[0][0]
+            o = np.array(output[0][0])
+            idx = np.argpartition(o, -1)[-1:][0] # get most likely 
+            pred = dictionary.idx2word[idx]
+            target = words[words.index(".") + 1]
+            correct += int(pred == target)
+    
+            if total % 100 == 0:
+                f.write("correct: " + str(correct))
+                f.write("total: " + str(total))
+    
+            if total > args.n:
+                break
 
-        o = output.numpy()[0][0]
-        o = np.array(output[0][0])
-        idx = np.argpartition(o, -1)[-1:][0] # get most likely 
-        pred = dictionary.idx2word[idx]
-        target = words[words.index(".") + 1]
-        correct += int(pred == target)
 
-        if total % 100 == 0:
-            print("correct: " + str(correct))
-            print("total: " + str(total))
-
-        if total > args.n:
-            break
-
-
-    print("correct: " + str(correct))
-    print("total: " + str(total))
+        f.write("final correct: " + str(correct))
+        f.write("final total: " + str(total))
 
 
 with open(args.model, 'rb') as f:
