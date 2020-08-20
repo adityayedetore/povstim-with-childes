@@ -17,17 +17,24 @@ def ambiguous(sent, keyword="MAIN-AUX"):
     return words.index(main_aux) != i
 
 def gen(cfg_filename, output_filename): 
+    print("reading from " + cfg_filename + " and printing to " + output_filename)
     with open(cfg_filename) as f:
         cfg_string = f.read()
     grammar = CFG.fromstring(cfg_string)
     gen = ""
+    count = 0
     for sentence in generate(grammar, depth=5):
+	if count % 1000 == 0:
+            print(count + " done")
         gen += " ".join(sentence) + "\n"
     print("====done generating====")
     gen = gen[:-1]
     gen = gen.split("\n")
     gen_str = ""
+    count = 0
     for sent in gen: 
+	if count % 1000 == 0:
+            print(count + " done")
         if (not ambiguous(sent)):
             gen_str += move(sent) + "\n"
     gen_str = gen_str[:-1]
