@@ -1,0 +1,118 @@
+\documentclass{article}
+\usepackage{booktabs}
+\title{Poverty of the Stimulus with CHILDES: Parameter search 1}
+\date{}
+\begin{document}
+\maketitle
+
+I did this 'pre-search' mainly to convince myself that the values I was going to be using for the grid search were reasonable. My main concern was whether the number of layers would change the performance of the model. 
+
+I didn't do any rigorous testing, since I just wanted to get a feel of the relative importance of the parameters, and how they interacted. 
+
+
+\section{Hyperparameter pre-search}
+
+\begin{table}[]
+\centering
+\begin{tabular}{@{}lllll@{}}
+\toprule
+ppl   & layers & hidden/ embedding size & dropout rate & learning rate \\ \midrule
+42.08 & 1      & 200                    & 0.0          & 20            \\
+39.97 & 2      & 200                    & 0.2          & 20            \\
+40.01 & 3      & 200                    & 0.2          & 20            \\
+40.35 & 4      & 200                    & 0.2          & 20            \\
+41.26 & 5      & 200                    & 0.2          & 20            \\ \bottomrule
+\end{tabular}
+\caption{varying layers}
+\label{Table.1}
+\end{table}
+%nlayers=2       #2      {2,3,4,5}       1       {1,2,3}         {1,2,3}         2               2
+%nhid=800        #200    200             200     {100,400,800}   1600            {650, 1200}     800
+%batch_size=20   #20     20              20      20              20              {64,128,256}    20
+%dropout=0.0     #0.2    0.2             0.0     0.0 / 0.2       0.0 / 0.2       0.2             {0.0,0.1,0.2,0.4}
+%lr=20           #20     20              20      20              20              20              {5, 10, 20}
+%epochs=40       #40     40              40      40              40              40              40
+
+
+In Table \ref{Table.1} we can see that as the number of layers changes, the resulting perplexity doesn't change too dramatically. 
+
+I also wanted to check if the number of layers would interact with the hidden size. In Table \ref{Table 2} the differences between the test set perplexities of models with different hidden size is pretty much the same no matter the number of layers. For example, the difference in performance between a model with 2 layers and 100 hidden units and one with 2 layers and 200 hidden units is close to the difference in performance between a model with 1 layer and 100 hidden units and a model with 1 layer and 200 hidden units. 
+
+Note that I didn't vary the embedding size with the hidden size. That was simply a mistake on my part. 
+\begin{table}[]
+\centering
+\begin{tabular}{@{}llllll@{}}
+\toprule
+ppl   & layers & hidden size & embedding size & dropout rate & learning rate \\ \midrule 
+47.27 & 1      & 100         & 200            & 0.0          & 20            \\
+42.08 & 1      & 200         & 200            & 0.0          & 20            \\
+36.84 & 1      & 400         & 200            & 0.0          & 20            \\
+35.32 & 1      & 800         & 200            & 0.0          & 20            \\ \midrule
+46.92 & 2      & 100         & 200            & 0.2          & 20            \\
+39.97 & 2      & 200         & 200            & 0.2          & 20            \\ %\cmidrule(r){1-5}
+36.51 & 2      & 400         & 200            & 0.2          & 20            \\
+35.38 & 2      & 800         & 200            & 0.2          & 20            \\ \midrule
+46.79 & 3      & 100         & 200            & 0.2          & 20            \\
+40.01 & 3      & 200         & 200            & 0.2          & 20            \\
+36.20 & 3      & 400         & 200            & 0.2          & 20            \\
+35.63 & 3      & 800         & 200            & 0.2          & 20            \\ \bottomrule
+\end{tabular}
+\caption{varying layers and hidden size}
+\label{Table 2}
+\end{table}
+
+
+I did do further tests. The first of those was with models with 1600 hidden units. I wanted to check if this would improve the model over 800 hidden units. It turns out it did not, but that may have been due to the fact that the embedding size was still 200. Then I co-varied hidden size and batch size, and then dropout and learning rate. These results weren't too interesting, so I won't take the time to report them in detail here. 
+
+%\begin{enumerate}
+%\item 2, 200, 20, 0.0,  5.0 25
+%\item 2, 200, 20, 0.0, 10.0 26
+%\item 2, 200, 20, 0.0, 20.0 27
+%\item 2, 200, 20, 0.1,  5.0 28
+%\item 2, 200, 20, 0.1, 10.0 29
+%\item 2, 200, 20, 0.1, 20.0 30
+%\item 2, 200, 20, 0.2,  5.0 31
+%\item 2, 200, 20, 0.2, 10.0
+%\item 2, 200, 20, 0.2, 20.0
+%\item 2, 200, 20, 0.4,  5.0
+%\item 2, 200, 20, 0.4, 10.0
+%\item 2, 200, 20, 0.4, 20.0
+%\item 2, 200, 80, 0.0,  5.0
+%\item 2, 200, 80, 0.0, 10.0
+%\item 2, 200, 80, 0.0, 20.0
+%\item 2, 200, 80, 0.1,  5.0
+%\item 2, 200, 80, 0.1, 10.0
+%\item 2, 200, 80, 0.1, 20.0
+%\item 2, 200, 80, 0.2,  5.0
+%\item 2, 200, 80, 0.2, 10.0
+%\item 2, 200, 80, 0.2, 20.0
+%\item 2, 200, 80, 0.4,  5.0
+%\item 2, 200, 80, 0.4, 10.0
+%\item 2, 200, 80, 0.4, 20.0
+%
+%\item 2, 800, 20, 0.0,  5.0  1
+%\item 2, 800, 20, 0.0, 10.0  2
+%\item 2, 800, 20, 0.0, 20.0  3
+%\item 2, 800, 20, 0.1,  5.0  4
+%\item 2, 800, 20, 0.1, 10.0  5
+%\item 2, 800, 20, 0.1, 20.0  6
+%\item 2, 800, 20, 0.2,  5.0  7
+%\item 2, 800, 20, 0.2, 10.0  8
+%\item 2, 800, 20, 0.2, 20.0  9
+%\item 2, 800, 20, 0.4,  5.0 10
+%\item 2, 800, 20, 0.4, 10.0 11
+%\item 2, 800, 20, 0.4, 20.0 12
+%\item 2, 800, 80, 0.0,  5.0 13
+%\item 2, 800, 80, 0.0, 10.0 14
+%\item 2, 800, 80, 0.0, 20.0 15
+%\item 2, 800, 80, 0.1,  5.0 16
+%\item 2, 800, 80, 0.1, 10.0 17
+%\item 2, 800, 80, 0.1, 20.0 18
+%\item 2, 800, 80, 0.2,  5.0 19
+%\item 2, 800, 80, 0.2, 10.0 20
+%\item 2, 800, 80, 0.2, 20.0 21
+%\item 2, 800, 80, 0.4,  5.0 22
+%\item 2, 800, 80, 0.4, 10.0 23
+%\item 2, 800, 80, 0.4, 20.0 24
+%\end{enumerate}
+\end{document}
