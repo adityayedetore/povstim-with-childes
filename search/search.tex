@@ -13,7 +13,7 @@ All extraneous marks from the CHILDES NA-Eng corpora were removed.
 \paragraph{training, validation, and test split}
 20\% of the files in the CHILDES Treebank (Valian, Soderstrom, Brown, Suppes) were randomly selected and placed in the test set, for purposes of creating a test set for fine-tuning. 3\% of the remaining files (by number of non-child utterances) were allocated to the validation and test sets each. The rest were allocated to the training set. 
 
-For the fine tuning data set, I 
+The models were fine tuned for seq2seq using the yes-no question data from the CHILDES Treebank. The LSTMs were fine tuned on the concatenation of the declarative form of a yes-no sentence and it's question form. The hidden states were reset after each declarative-question pair.  The test set was comprised completely of questions from files that were excluded from the pre-training. Both the test set and the validation set were chosen randomly, and were of similar sizes, so we can expect the performance over those sets to be comparable barring any over-fitting. 
 
 \section*{Hyper-parameters and further model details}
 \paragraph{LSTM} For LSTMs I explored the following hyper-parameters for a total of 144 models. 
@@ -44,7 +44,51 @@ nlayers & nhidden/embed & lr & batch\_size & dropout  & seed    & test loss & te
 2       & 800           & 20 & 20          & 0.4      & 1097    & 3.26      & 26.13    \\ \bottomrule
 \end{tabular}%
 }
+    \caption{Table 1}
 \label{tab:Table-1}
+\end{table}
+
+\section{Fine Tuning}
+
+
+\paragraph{Performance on the held out questions}
+\begin{table}[]
+\begin{tabular}{@{}lll@{}}
+\toprule
+seed & valid ppl & test ppl \\ \midrule
+1093 & 7.10      & 7.29     \\  
+1094 & 6.43      & 6.57     \\  
+1095 & 6.61      & 6.74     \\  
+1096 & 6.89      & 6.97     \\  
+1097 & 5.96      & 6.14     \\  
+1131 & 7.22      & 7.30     \\  
+1133 & 6.86      & 7.09     \\  
+1134 & 6.64      & 6.76     \\  
+1135 & 7.20      & 7.35     \\ \bottomrule
+\end{tabular}
+    \caption{Table 2}
+\label{tab:Table-2}
+\end{table}
+
+\section{Results}
+
+The evaluation sets were generated using a CFG, with vocabulary of words commonly found in the training data. 
+
+\begin{table}[]
+\begin{tabular}{@{}lllll@{}}
+\toprule
+seed   & 1000 test & 1000 gen & 10000 test & 10000 gen \\ \midrule
+1093   & 0.898     & 0.026    & 0.8983     & 0.0313   \\
+1094   & 0.924     & 0.017    & 0.9221     & 0.0166   \\  
+1095   & 0.979     & 0.053    & 0.9846     & 0.0395   \\  
+1096   & 0.944     & 0.082    & 0.9455     & 0.0778   \\  
+1097   & 0.978     & 0.049    & 0.983      & 0.0512   \\  
+1131   & 0.997     & 0.030    & 0.9923     & 0.0313   \\  
+1133   & 1         & 0.020    & 1          & 0.0162   \\  
+1134   & 0.987     & 0.022    & 0.9887     & 0.0214   \\  
+1135   & 0.994     & 0.079    & 0.9932     & 0.0860   \\ \bottomrule
+\end{tabular}
+\label{tab:Table-3}
 \end{table}
 
 \end{document}
