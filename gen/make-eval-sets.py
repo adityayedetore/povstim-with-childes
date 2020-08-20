@@ -24,8 +24,8 @@ def gen(cfg_filename, output_filename):
     gen = ""
     count = 0
     for sentence in generate(grammar, depth=5):
-	if count % 1000 == 0:
-            print(count + " done")
+        if count % 1000 == 0:
+            print(str(count) + " done")
         gen += " ".join(sentence) + "\n"
     print("====done generating====")
     gen = gen[:-1]
@@ -33,8 +33,8 @@ def gen(cfg_filename, output_filename):
     gen_str = ""
     count = 0
     for sent in gen: 
-	if count % 1000 == 0:
-            print(count + " done")
+        if count % 1000 == 0:
+            print(str(count) + " done")
         if (not ambiguous(sent)):
             gen_str += move(sent) + "\n"
     gen_str = gen_str[:-1]
