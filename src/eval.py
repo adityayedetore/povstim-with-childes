@@ -21,7 +21,7 @@ parser.add_argument('--results', type=str, default="results.txt",
         help="path to saved results")
 parser.add_argument('--n', type=int, default=1000,
         help="max sentences to evaluate on")
-parser.add_argument('--no-shuffle', action="store_true",
+parser.add_argument('--no_shuffle', action="store_true",
         help="keep the order of sentences")
 parser.add_argument('--cuda', action='store_true',
                     help='use CUDA')
@@ -33,7 +33,7 @@ def auto_eval(dictionary, hidden, model):
     with open(args.eval, "r") as f:
         eva = f.readlines()
 
-    if not args.shuffle: 
+    if not args.no_shuffle: 
         rand.shuffle(eva)
 
     with open(args.results, 'w') as f:
