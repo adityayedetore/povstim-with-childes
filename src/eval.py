@@ -55,15 +55,15 @@ def auto_eval(dictionary, hidden, model):
             correct += int(pred == target)
     
             if total % 100 == 0:
-                f.write("correct: " + str(correct))
-                f.write("total: " + str(total))
+                f.write("correct: " + str(correct) + "\n")
+                f.write("total: " + str(total) + "\n")
     
             if total > args.n:
                 break
 
 
-        f.write("final correct: " + str(correct))
-        f.write("final total: " + str(total))
+        f.write("final correct: " + str(correct) + "\n")
+        f.write("final total: " + str(total) + "\n")
 
 
 with open(args.model, 'rb') as f:
