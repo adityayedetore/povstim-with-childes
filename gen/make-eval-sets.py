@@ -40,10 +40,10 @@ def gen(cfg_filename, vocab_filename = "vocab-cfg.txt", output_filename):
         if (not ambiguous(sent)):
             gen_str += move(sent) + "\n"
     gen_str = gen_str[:-1]
-    print("====saving " + output_filename + "====")
+    print("====saving to " + output_filename + "====")
 
     with open(output_filename, "w") as f:
         f.write(gen_str)
 
-gen("test-cfg.txt", "decl-quest-test-set.txt~small")
-gen("gen-cfg.txt", "decl-quest-gen-set.txt~small")
+gen("test-cfg.txt", "decl-quest-test-set.txt~medium")
+gen("gen-cfg.txt", "decl-quest-gen-set.txt~medium")
