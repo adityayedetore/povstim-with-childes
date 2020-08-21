@@ -16,7 +16,7 @@ def ambiguous(sent, keyword="MAIN-AUX"):
     main_aux = words[i]
     return words.index(main_aux) != i
 
-def gen(cfg_filename, vocab_filename = "vocab-cfg.txt", output_filename): 
+def gen(cfg_filename, vocab_filename="vocab-cfg.txt", output_filename="output.txt"): 
     print("reading from " + cfg_filename + " and printing to " + output_filename)
     with open(cfg_filename) as f:
         cfg_string = f.read() + "\n"
