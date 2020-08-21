@@ -16,11 +16,11 @@ def ambiguous(sent, keyword="MAIN-AUX"):
     main_aux = words[i]
     return words.index(main_aux) != i
 
-def gen(cfg_filename, vocab_filename="vocab-cfg.txt", output_filename="output.txt"): 
-    print("reading from " + cfg_filename + " and printing to " + output_filename)
-    with open(cfg_filename) as f:
+def gen(cfg, vocab="vocab-cfg.txt", output="output.txt"): 
+    print("reading from " + cfg + " and printing to " + output)
+    with open(cfg) as f:
         cfg_string = f.read() + "\n"
-    with open (vocab_filename) as f:
+    with open (vocab) as f:
         cfg_string += f.read()
     grammar = CFG.fromstring(cfg_string)
     gen = ""
@@ -40,10 +40,10 @@ def gen(cfg_filename, vocab_filename="vocab-cfg.txt", output_filename="output.tx
         if (not ambiguous(sent)):
             gen_str += move(sent) + "\n"
     gen_str = gen_str[:-1]
-    print("====saving to " + output_filename + "====")
+    print("====saving to " + output + "====")
 
-    with open(output_filename, "w") as f:
+    with open(output, "w") as f:
         f.write(gen_str)
 
-gen("test-cfg.txt", "decl-quest-test-set.txt~medium")
-gen("gen-cfg.txt", "decl-quest-gen-set.txt~medium")
+gen("test-cfg.txt", vocab="vocab-cfg.txt", output="decl-quest-test-set.txt~medium")
+gen("gen-cfg.txt", vocab="vocab-cfg.txt", output="decl-quest-gen-set.txt~medium")
