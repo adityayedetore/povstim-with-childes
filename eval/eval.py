@@ -78,6 +78,7 @@ def auto_eval(dictionary, hidden, model):
                 hidden = repackage_hidden(hidden)
                 words = line.split()
                 for i, word in enumerate(words[:words.index(".") + 1]):
+                    print(i)
                     if (word not in dictionary.word2idx):
                         word = "<unk>"
                     data = torch.tensor([[dictionary.word2idx[word]]])
