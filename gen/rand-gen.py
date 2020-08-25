@@ -58,7 +58,8 @@ def gen(cfg, vocab, output, n):
         while n > 0:
             sent = grammar.gen_random('S')
             if not ambiguous(sent):
-                f.write(move(sent) + "\n")
+                msent = move(sent) + "\n"
+                f.write(msent.replace("-", " "))
                 n -= 1
 
 
