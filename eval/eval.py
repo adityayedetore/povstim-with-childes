@@ -21,11 +21,14 @@ parser.add_argument('--summary', type=str, default="summary.txt",
         help="path to performance summary")
 parser.add_argument('--n', type=int, default=1000,
         help="max sentences to evaluate on")
+parser.add_argument('--seed', type=int, default=1111,
+        help="random seed")
 parser.add_argument('--cuda', action='store_true',
                     help='use CUDA')
 args = parser.parse_args()
 
 def auto_eval(dictionary, hidden, model):
+    model.eval()
     total = 0
     first_correct = 0
     full_correct = 0
@@ -33,51 +36,61 @@ def auto_eval(dictionary, hidden, model):
         eva = f.readlines()
 
     with open(args.results, 'w') as f:
-        for line in eva:
-            total += 1
-            hidden = model.init_hidden(1)
-            words = line.split()
-            for i, word in enumerate(words[:words.index(".") + 1]):
-                if (word not in dictionary.word2idx):
-                    word = "<unk>"
-                data = torch.tensor([[dictionary.word2idx[word]]])
-                output, hidden = model(data, hidden)
-
-            o = output.numpy()[0][0]
-            o = np.array(output[0][0])
-            idx = np.argpartition(o, -1)[-1:][0] # get most likely 
-            pred = dictionary.idx2word[idx]
-            pred_sent = pred
-            target = words[words.index(".") + 1]
-            first_correct += int(pred == target)
-            
-            i = 0
-            while(pred != "?"):
-                word = pred
-                data = torch.tensor([[dictionary.word2idx[word]]])
-                output, hidden = model(data, hidden)
+        with torch.no_grad():
+            for line in eva:
+                total += 1
+                hidden = model.init_hidden(1)
+                hidden = repackage_hidden(hidden)
+                words = line.split()
+                for i, word in enumerate(words[:words.index(".") + 1]):
+                    if (word not in dictionary.word2idx):
+                        word = "<unk>"
+                    data = torch.tensor([[dictionary.word2idx[word]]])
+                    output, hidden = model(data, hidden)
+                    hidden=repackage_hidden(hidden)
+    
                 o = output.numpy()[0][0]
                 o = np.array(output[0][0])
                 idx = np.argpartition(o, -1)[-1:][0] # get most likely 
                 pred = dictionary.idx2word[idx]
-                pred_sent += " " + pred
-                i += 1
-                if i > 50:
+                pred_sent = pred
+                target = words[words.index(".") + 1]
+                first_correct += int(pred == target)
+                
+                i = 0
+                while(pred != "?"):
+                    word = pred
+                    data = torch.tensor([[dictionary.word2idx[word]]])
+                    output, hidden = model(data, hidden)
+                    hidden = repackage_hidden(hidden)
+                    o = output.numpy()[0][0]
+                    o = np.array(output[0][0])
+                    idx = np.argpartition(o, -1)[-1:][0] # get most likely 
+                    pred = dictionary.idx2word[idx]
+                    pred_sent += " " + pred
+                    i += 1
+                    if i > 50:
+                        break
+                pred_sent = ' '.join(words[:words.index(".") + 1]) + ' ' + pred_sent + "\n"
+                f.write("target: " + line + "actual: " + pred_sent + "\n")
+    
+                if (pred_sent == line):
+                    full_correct += 1
+    
+                if total > args.n:
                     break
-            pred_sent = ' '.join(words[:words.index(".") + 1]) + ' ' + pred_sent + "\n"
-            f.write("target: " + line + "actual: " + pred_sent + "\n")
-
-            if (pred_sent == line):
-                full_correct += 1
-
-            if total > args.n:
-                break
-
 
     with open(args.summary, "w") as f:
         f.write("first word correct: " + str(first_correct) + "/" + str(total-1) + "\n")
         f.write("full sent correct: " + str(full_correct) + "/" + str(total-1) + "\n")
 
+# Set the random seed manually for reproducibility.
+torch.manual_seed(args.seed)
+if torch.cuda.is_available():
+    if not args.cuda:
+        print("WARNING: You have a CUDA device, so you should probably run with --cuda")
+    else:
+        torch.cuda.manual_seed(args.seed)
 
 with open(args.model, 'rb') as f:
     print("Loading the model")
@@ -88,11 +101,11 @@ with open(args.model, 'rb') as f:
         warnings.filterwarnings("ignore")
         model = torch.load(f, map_location = lambda storage, loc: storage)
 
-model.eval()
 if args.cuda:
     model.cuda()
 else:
     model.cpu()
+print(model)
 total_loss = 0
 hidden = model.init_hidden(1)
 dictionary = dictionary_corpus.Dictionary("CHILDES")
