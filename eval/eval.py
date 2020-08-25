@@ -27,6 +27,41 @@ parser.add_argument('--cuda', action='store_true',
                     help='use CUDA')
 args = parser.parse_args()
 
+# Set the random seed manually for reproducibility.
+torch.manual_seed(args.seed)
+if torch.cuda.is_available():
+    if not args.cuda:
+        print("WARNING: You have a CUDA device, so you should probably run with --cuda")
+    else:
+        torch.cuda.manual_seed(args.seed)
+
+###############################################################################
+# Load data
+###############################################################################
+
+###############################################################################
+# Build the model
+###############################################################################
+
+with open(args.model, 'rb') as f:
+    print("Loading the model")
+    if args.cuda:
+        model = torch.load(f)
+    else:
+        import warnings
+        warnings.filterwarnings("ignore")
+        model = torch.load(f, map_location = lambda storage, loc: storage)
+
+if args.cuda:
+    model.cuda()
+else:
+    model.cpu()
+
+###############################################################################
+# Evaluation code
+###############################################################################
+
+
 def auto_eval(dictionary, hidden, model):
     model.eval()
     total = 0
@@ -65,7 +100,7 @@ def auto_eval(dictionary, hidden, model):
                     word = pred
                     data = torch.tensor([[dictionary.word2idx[word]]])
                     if args.cuda:
-                        data.cuda()
+                        data = data.cuda()
                     output, hidden = model(data, hidden)
                     hidden = repackage_hidden(hidden)
                     output.cpu()
@@ -90,28 +125,7 @@ def auto_eval(dictionary, hidden, model):
         f.write("first word correct: " + str(first_correct) + "/" + str(total-1) + "\n")
         f.write("full sent correct: " + str(full_correct) + "/" + str(total-1) + "\n")
 
-# Set the random seed manually for reproducibility.
-torch.manual_seed(args.seed)
-if torch.cuda.is_available():
-    if not args.cuda:
-        print("WARNING: You have a CUDA device, so you should probably run with --cuda")
-    else:
-        torch.cuda.manual_seed(args.seed)
 
-with open(args.model, 'rb') as f:
-    print("Loading the model")
-    if args.cuda:
-        model = torch.load(f)
-    else:
-        import warnings
-        warnings.filterwarnings("ignore")
-        model = torch.load(f, map_location = lambda storage, loc: storage)
-
-if args.cuda:
-    model.cuda()
-else:
-    model.cpu()
-print(model)
 total_loss = 0
 hidden = model.init_hidden(1)
 dictionary = dictionary_corpus.Dictionary("CHILDES")
