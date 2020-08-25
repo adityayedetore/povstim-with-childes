@@ -7,11 +7,11 @@ NP_O -> Det N_S | Det N_P | Det N_S Prep Det N | Det N_P Prep Det N | Det N_S RC
 
 N -> N_S | N_P
 
-VP_M_S -> 'MAIN-AUX' Aux_S V_intrans 
-VP_M_S -> 'MAIN-AUX' Aux_S V_trans NP_O
+VP_M_S -> MAIN-AUX Aux_S V_intrans 
+VP_M_S -> MAIN-AUX Aux_S V_trans NP_O
 
-VP_M_P -> 'MAIN-AUX' Aux_P V_intrans
-VP_M_P -> 'MAIN-AUX' Aux_P V_trans NP_O
+VP_M_P -> MAIN-AUX Aux_P V_intrans
+VP_M_P -> MAIN-AUX Aux_P V_trans NP_O
 
 RC_S -> Rel Aux_S V_intrans | Rel Det N_S Aux_S V_trans | Rel Det N_P Aux_P V_trans | Rel Aux_S V_trans Det N
 RC_P -> Rel Aux_P V_intrans | Rel Det N_S Aux_S V_trans | Rel Det N_P Aux_P V_trans | Rel Aux_P V_trans Det N
