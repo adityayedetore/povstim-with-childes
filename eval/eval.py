@@ -28,6 +28,7 @@ args = parser.parse_args()
 def auto_eval(dictionary, hidden, model):
     total = 0
     first_correct = 0
+    full_correct = 0
     with open(args.eval, "r") as f:
         eva = f.readlines()
 
@@ -63,15 +64,19 @@ def auto_eval(dictionary, hidden, model):
                 i += 1
                 if i > 50:
                     break
+            pred_sent = ' '.join(words[:words.index(".") + 1]) + ' ' + pred_sent + "\n"
+            f.write("target: " + line + "actual: " + pred_sent + "\n")
 
-            f.write("target: " + line + "actual: " + pred_sent + "\n\n")
-    
+            if (pred_sent == line):
+                full_correct += 1
+
             if total > args.n:
                 break
 
 
     with open(args.summary, "w") as f:
-        f.write("first word correct: " + str(first_correct) + "/" + str(total) + "\n")
+        f.write("first word correct: " + str(first_correct) + "/" + str(total-1) + "\n")
+        f.write("full sent correct: " + str(full_correct) + "/" + str(total-1) + "\n")
 
 
 with open(args.model, 'rb') as f:
