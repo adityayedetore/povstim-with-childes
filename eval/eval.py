@@ -10,8 +10,6 @@ from utils import repackage_hidden
 import dictionary_corpus
 import numpy as np
 
-import random as rand
-
 parser = argparse.ArgumentParser(description='Generates sentences from trained model')
 parser.add_argument('--eval', type=str, default="none",
         help='path to file to evaluate on')
@@ -19,22 +17,19 @@ parser.add_argument('--model', type=str, default="model.pt",
         help="path to model to evaluate on")
 parser.add_argument('--results', type=str, default="results.txt", 
         help="path to saved results")
+parser.add_argument('--summary', type=str, default="summary.txt",
+        help="path to performance summary")
 parser.add_argument('--n', type=int, default=1000,
         help="max sentences to evaluate on")
-parser.add_argument('--no_shuffle', action="store_true",
-        help="keep the order of sentences")
 parser.add_argument('--cuda', action='store_true',
                     help='use CUDA')
 args = parser.parse_args()
 
 def auto_eval(dictionary, hidden, model):
     total = 0
-    correct = 0
+    first_correct = 0
     with open(args.eval, "r") as f:
         eva = f.readlines()
-
-    if not args.no_shuffle: 
-        rand.shuffle(eva)
 
     with open(args.results, 'w') as f:
         for line in eva:
@@ -46,24 +41,37 @@ def auto_eval(dictionary, hidden, model):
                     word = "<unk>"
                 data = torch.tensor([[dictionary.word2idx[word]]])
                 output, hidden = model(data, hidden)
-    
+
             o = output.numpy()[0][0]
             o = np.array(output[0][0])
             idx = np.argpartition(o, -1)[-1:][0] # get most likely 
             pred = dictionary.idx2word[idx]
+            pred_sent = pred
             target = words[words.index(".") + 1]
-            correct += int(pred == target)
-    
-            if total % 100 == 0:
-                f.write("correct: " + str(correct) + "\n")
-                f.write("total: " + str(total) + "\n")
+            first_correct += int(pred == target)
+            
+            i = 0
+            while(pred != "?"):
+                word = pred
+                data = torch.tensor([[dictionary.word2idx[word]]])
+                output, hidden = model(data, hidden)
+                o = output.numpy()[0][0]
+                o = np.array(output[0][0])
+                idx = np.argpartition(o, -1)[-1:][0] # get most likely 
+                pred = dictionary.idx2word[idx]
+                pred_sent += " " + pred
+                i += 1
+                if i > 50:
+                    break
+
+            f.write("target: " + line + "actual: " + pred_sent + "\n\n")
     
             if total > args.n:
                 break
 
 
-        f.write("final correct: " + str(correct) + "\n")
-        f.write("final total: " + str(total) + "\n")
+    with open(args.summary, "w") as f:
+        f.write("first word correct: " + str(first_correct) + "/" + str(total) + "\n")
 
 
 with open(args.model, 'rb') as f:
