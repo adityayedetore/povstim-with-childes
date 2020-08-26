@@ -39,6 +39,7 @@ if torch.cuda.is_available():
 # Load data
 ###############################################################################
 
+
 ###############################################################################
 # Build the model
 ###############################################################################
@@ -78,16 +79,15 @@ def auto_eval(dictionary, hidden, model):
                 hidden = repackage_hidden(hidden)
                 words = line.split()
                 for i, word in enumerate(words[:words.index(".") + 1]):
-                    print(i)
                     if (word not in dictionary.word2idx):
                         word = "<unk>"
                     data = torch.tensor([[dictionary.word2idx[word]]])
                     if args.cuda:
-                        data = data.cuda()
+                        data = data.to("cuda")
                     output, hidden = model(data, hidden)
                     hidden=repackage_hidden(hidden)
 
-                output.cpu()
+                output = output.to("cpu")
                 o = output.numpy()[0][0]
                 o = np.array(output[0][0])
                 idx = np.argpartition(o, -1)[-1:][0] # get most likely 
@@ -101,10 +101,10 @@ def auto_eval(dictionary, hidden, model):
                     word = pred
                     data = torch.tensor([[dictionary.word2idx[word]]])
                     if args.cuda:
-                        data = data.cuda()
+                        data = data.to("cuda")
                     output, hidden = model(data, hidden)
                     hidden = repackage_hidden(hidden)
-                    output.cpu()
+                    output = output.to("cpu")
                     o = output.numpy()[0][0]
                     o = np.array(output[0][0])
                     idx = np.argpartition(o, -1)[-1:][0] # get most likely 
