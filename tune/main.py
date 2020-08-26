@@ -77,15 +77,23 @@ criterion = nn.CrossEntropyLoss()
 ###############################################################################
 
 logging.info("Building the model")
+print("Loading the model")
 
-#model = model.RNNModel(args.model, ntokens, args.emsize, args.nhid, args.nlayers, args.dropout, args.tied)
-with open(args.load, 'rb') as f:
-    import warnings
-    warnings.filterwarnings("ignore")
-    model = torch.load(f, map_location = lambda storage, loc: storage)
+if args.load == "no-pretraining":
+    model = model.RNNModel(args.model, ntokens, args.emsize, args.nhid, args.nlayers, args.dropout, args.tied)
+else:
+    with open(args.load, 'rb') as f:
+        if args.cuda:
+            model = torch.load(f)
+        else:
+            import warnings
+            warnings.filterwarnings("ignore")
+            model = torch.load(f, map_location = lambda storage, loc: storage)
 
 if args.cuda:
     model.cuda()
+else:
+    model.cpu()
 
 
 
