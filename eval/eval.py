@@ -119,7 +119,8 @@ def auto_eval(dictionary, hidden, model):
                 num_full_correct += full_correct
 
                 f.write("target: " + line + "actual: " + pred_sent + "\n")
-                f.write("first correct: " + str(first_correct) + "\n" + "full correct: " + str(full_correct) + "\n")
+                f.write("first correct: " + str(first_correct) + "\n" + 
+                        "full correct: " + str(full_correct) + "\n")
     
                 if total > args.n:
                     break
