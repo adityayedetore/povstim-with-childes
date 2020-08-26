@@ -68,32 +68,38 @@ def interactive(word, dictionary, hidden, model):
                     + str(o[x]))
 
 def auto_eval(dictionary, hidden, model):
-    f = open(args.eval, "r")
-    ratings = []
-    preds = []
-    count = 0
-    print("recall@" + str(args.recall_k))
-    for line in f:
-        for word in line.split():
-            if (word not in dictionary.word2idx):
-                word = "<unk>"
-            data = torch.tensor([[dictionary.word2idx[word]]])
-            if args.cuda:
-                data = data.cuda()
-            output, hidden = model(data, hidden)
-            output = output.cpu()
-            o = output.numpy()[0][0]
-            idx = np.argpartition(o, -args.recall_k)[-args.recall_k:] 
-            idx = idx[np.argsort(o[idx])]
-            idx = idx[::-1]
-            ratings.append(int(word in preds))
-            preds = [dictionary.idx2word[x] for x in idx]
-            count = count + 1
-            if count % 1000 == 0:
-                print(str(np.mean(ratings)))
+    with open(args.eval, "r") as f:
+        ratings = []
+        preds = []
+        recall_str = ""
+        count = 0
+        print("recall@" + str(args.recall_k))
+        for line in f:
+            for word in line.split():
+                if (word not in dictionary.word2idx):
+                    word = "<unk>"
+                data = torch.tensor([[dictionary.word2idx[word]]])
+                if args.cuda:
+                    data = data.cuda()
+                output, hidden = model(data, hidden)
+                output = output.cpu()
+                o = output.numpy()[0][0]
+                idx = np.argpartition(o, -args.recall_k)[-args.recall_k:] 
+                idx = idx[np.argsort(o[idx])]
+                idx = idx[::-1]
+                ratings.append(int(word in preds))
+                if word in preds:
+                    recall_str += str(preds.index(word) + 1) + "\n"
+                else:
+                    recall_str += "not-in-recall@" + str(args.recall_k) + "\n"
+                preds = [dictionary.idx2word[x] for x in idx]
+                count = count + 1
+                if count % 1000 == 0:
+                    print(str(np.mean(ratings)))
     print("final average: " + str(np.mean(ratings)))
     with open(args.results, 'w') as f:
-        f.write("final average: " + str(np.mean(ratings)))
+        f.write("final average: " + str(np.mean(ratings)) + "\n")
+        f.write(recall_str)
 
 with open(args.model, 'rb') as f:
     if args.cuda:
