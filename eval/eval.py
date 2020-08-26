@@ -66,8 +66,8 @@ else:
 def auto_eval(dictionary, hidden, model):
     model.eval()
     total = 0
-    first_correct = 0
-    full_correct = 0
+    num_first_correct = 0
+    num_full_correct = 0
     with open(args.eval, "r") as f:
         eva = f.readlines()
 
@@ -94,7 +94,8 @@ def auto_eval(dictionary, hidden, model):
                 pred = dictionary.idx2word[idx]
                 pred_sent = pred
                 target = words[words.index(".") + 1]
-                first_correct += int(pred == target)
+                first_correct = int(pred == target)
+                num_first_correct += first_correct
                 
                 i = 0
                 while(pred != "?"):
@@ -114,17 +115,18 @@ def auto_eval(dictionary, hidden, model):
                     if i > 50:
                         break
                 pred_sent = ' '.join(words[:words.index(".") + 1]) + ' ' + pred_sent + "\n"
+                full_correct = int(pred_sent == line)
+                num_full_correct += full_correct
+
                 f.write("target: " + line + "actual: " + pred_sent + "\n")
-    
-                if (pred_sent == line):
-                    full_correct += 1
+                f.write("first correct: " + str(first_correct) + "\n" + "full correct: " + str(full_correct) + "\n")
     
                 if total > args.n:
                     break
 
     with open(args.summary, "w") as f:
-        f.write("first word correct: " + str(first_correct) + "/" + str(total-1) + "\n")
-        f.write("full sent correct: " + str(full_correct) + "/" + str(total-1) + "\n")
+        f.write("first word correct: " + str(num_first_correct) + "/" + str(total-1) + "\n")
+        f.write("full sent correct: " + str(num_full_correct) + "/" + str(total-1) + "\n")
 
 
 total_loss = 0
