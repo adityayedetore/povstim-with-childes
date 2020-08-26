@@ -24,6 +24,8 @@ parser.add_argument('--interactive', action='store_true',
         help='word by word interactive mode')
 parser.add_argument('--model', type=str, default="model.pt",
         help="path to model to evaluate on")
+parser.add_argument("--cuda", action='store_true',
+        help="use cuda")
 args = parser.parse_args()
 
 def generate(hidden, dictionary, model):
@@ -72,7 +74,10 @@ def auto_eval(dictionary, hidden, model):
                 print(word + " is <unk>")
                 word = "<unk>"
             data = torch.tensor([[dictionary.word2idx[word]]])
+            if args.cuda:
+                data = data.cuda()
             output, hidden = model(data, hidden)
+            output = output.cpu()
             o = output.numpy()[0][0]
             idx = np.argpartition(o, -10)[-10:] 
             idx = idx[np.argsort(o[idx])]
@@ -81,14 +86,18 @@ def auto_eval(dictionary, hidden, model):
             preds = [dictionary.idx2word[x] for x in idx]
     print("average: " + str(np.mean(ratings)))
 
-
 with open(args.model, 'rb') as f:
-    import warnings
-    warnings.filterwarnings("ignore")
-    model = torch.load(f, map_location = lambda storage, loc: storage)
+    if args.cuda:
+        model = torch.load(f)
+    else:
+        import warnings
+        warnings.filterwarnings("ignore")
+        model = torch.load(f, map_location = lambda storage, loc: storage)
+
+if args.cuda:
+    model.cuda()
 
 model.eval()
-model.cpu()
 total_loss = 0
 eval_batch_size = 1
 hidden = model.init_hidden(eval_batch_size)
