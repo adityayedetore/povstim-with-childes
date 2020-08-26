@@ -13,7 +13,6 @@ from utils import repackage_hidden, batchify, get_batch
 import dictionary_corpus
 import numpy as np
 import random
-from scipy.special import softmax
 
 parser = argparse.ArgumentParser(description='Generates sentences from trained model')
 parser.add_argument('--gen', type=int, default=0,
@@ -41,7 +40,7 @@ def generate(hidden, dictionary, model):
     while(i > 0):
         data = torch.tensor([[dictionary.word2idx[word]]])
         output, hidden = model(data, hidden)
-        o = softmax(output.numpy()[0][0])
+        o = output.numpy()[0][0]
         index = random.choices(indices, weights = o, k = 1)[0]
         word = dictionary.idx2word[index]
         f.write( word + ' ')
@@ -60,7 +59,7 @@ def interactive(word, dictionary, hidden, model):
             word = "<unk>"
         data = torch.tensor([[dictionary.word2idx[word]]])
         output, hidden = model(data, hidden)
-        o = softmax(output.numpy()[0][0])
+        o = output.numpy()[0][0]
         idx = np.argpartition(o, -10)[-10:] # get 10 most likely 
         idx = idx[np.argsort(o[idx])] # sort by likelihood and reverse
         idx = idx[::-1]
