@@ -32,22 +32,22 @@ parser.add_argument("--cuda", action='store_true',
 args = parser.parse_args()
 
 def generate(hidden, dictionary, model):
-    i = args.gen
-    word = input("first word: ")
-    indices = list(range(0, len(dictionary)))
-    f = open('gen-sents.csv', 'w')
-    f.write("text\n\"" + word + ' ' )
-    while(i > 0):
-        data = torch.tensor([[dictionary.word2idx[word]]])
-        output, hidden = model(data, hidden)
-        o = output.numpy()[0][0]
-        index = random.choices(indices, weights = o, k = 1)[0]
-        word = dictionary.idx2word[index]
-        f.write( word + ' ')
-        if word == "." or word == "?" or word == "!":
-            f.write("\"\n\"")
-            i = i - 1
-    f.close()
+    from scipy.special import softmax
+    with open('gen-sents.csv', 'w') as f:
+        i = args.gen
+        word = input("first word: ")
+        indices = list(range(0, len(dictionary)))
+        f.write("text\n\"" + word + ' ' )
+        while(i > 0):
+            data = torch.tensor([[dictionary.word2idx[word]]])
+            output, hidden = model(data, hidden)
+            o = softmax(output.numpy()[0][0])
+            index = random.choices(indices, weights = o, k = 1)[0]
+            word = dictionary.idx2word[index]
+            f.write( word + ' ')
+            if word == "." or word == "?" or word == "!":
+                f.write("\"\n\"")
+                i = i - 1
     print("Remember to remove the extra \" from the bottom of the csv")
 
 def interactive(word, dictionary, hidden, model):
