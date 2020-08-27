@@ -98,7 +98,6 @@ def auto_eval(dictionary, hidden, model):
                     print(str(np.mean(ratings)))
     print("final average: " + str(np.mean(ratings)))
     with open(args.results, 'w') as f:
-        f.write("final average: " + str(np.mean(ratings)) + "\n")
         f.write(recall_str)
 
 with open(args.model, 'rb') as f:
