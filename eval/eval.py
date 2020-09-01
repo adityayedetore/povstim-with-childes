@@ -115,13 +115,9 @@ def auto_eval(dictionary, hidden, model):
                     if i > 50:
                         break
                 pred_sent = ' '.join(words[:words.index(".") + 1]) + ' ' + pred_sent + "\n"
-                full_correct = int(pred_sent == line)
-                num_full_correct += full_correct
+                num_full_correct += int(pred_sent == line)
 
-                f.write("target: " + line + "actual: " + pred_sent + "\n")
-                f.write("first correct: " + str(first_correct) + "\n" + 
-                        "full correct: " + str(full_correct) + "\n")
-    
+                f.write("target: " + line + "actual: " + pred_sent)
                 if total > args.n:
                     break
 
