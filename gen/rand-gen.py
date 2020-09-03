@@ -3,6 +3,13 @@
 
 from collections import defaultdict
 import random
+import sys
+import argparse
+
+parser = argparse.ArgumentParser(description="Generate random sentences from CFG")
+parser.add_argument('--n', type=int, default=10000,
+        help='number of sentences to generate')
+args=parser.parse_args()
 
 class CFG(object):
     def __init__(self):
@@ -36,7 +43,7 @@ def ambiguous(sent, keyword="MAIN-AUX"):
     main_aux = words[i]
     return words.index(main_aux) != i
 
-def gen(cfg, vocab, output, n):
+def gen(cfg, vocab, output, n=10000):
     grammar = CFG()
     print("reading from " + cfg + " and printing to " + output)
     print("====generating====")
@@ -64,5 +71,5 @@ def gen(cfg, vocab, output, n):
 
 
 if __name__ == "__main__":
-    gen(cfg="test-cfg.txt", vocab="vocab-cfg.txt", output="decl-quest-test-set.txt", n=10000)
-    gen(cfg="gen-cfg.txt", vocab="vocab-cfg.txt", output="decl-quest-gen-set.txt", n=10000)
+    gen(cfg="test-cfg.txt", vocab="vocab-cfg.txt", output="decl-quest-test-set.txt", n=args.n)
+    gen(cfg="gen-cfg.txt", vocab="vocab-cfg.txt", output="decl-quest-gen-set.txt", n=args.n)
