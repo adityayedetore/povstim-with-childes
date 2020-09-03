@@ -33,11 +33,10 @@ args = parser.parse_args()
 
 def generate(hidden, dictionary, model):
     from scipy.special import softmax
-    with open('gen-sents.csv', 'w') as f:
+    with open('sents.csv', 'w') as f:
         i = args.gen
-        word = input("first word: ")
+        word = '.'
         indices = list(range(0, len(dictionary)))
-        f.write("text\n\"" + word + ' ' )
         while(i > 0):
             data = torch.tensor([[dictionary.word2idx[word]]])
             output, hidden = model(data, hidden)
@@ -46,9 +45,10 @@ def generate(hidden, dictionary, model):
             word = dictionary.idx2word[index]
             f.write( word + ' ')
             if word == "." or word == "?" or word == "!":
-                f.write("\"\n\"")
+                f.write("\n")
+                word == '.'
+                hidden = model.init_hidden(1)
                 i = i - 1
-    print("Remember to remove the extra \" from the bottom of the csv")
 
 def interactive(word, dictionary, hidden, model):
     while(word != "quit"):

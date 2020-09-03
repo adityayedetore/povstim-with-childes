@@ -23,6 +23,8 @@ parser.add_argument('--n', type=int, default=1000,
         help="max sentences to evaluate on")
 parser.add_argument('--seed', type=int, default=1111,
         help="random seed")
+parser.add_argument('--data', type=str, default='CHILDES',
+        help='path to pre-training data')
 parser.add_argument('--cuda', action='store_true',
                     help='use CUDA')
 args = parser.parse_args()
@@ -117,7 +119,7 @@ def auto_eval(dictionary, hidden, model):
                 pred_sent = ' '.join(words[:words.index(".") + 1]) + ' ' + pred_sent + "\n"
                 num_full_correct += int(pred_sent == line)
 
-                f.write("target: " + line + "actual: " + pred_sent)
+                f.write("target\t" + line + "actual\t" + pred_sent)
                 if total > args.n:
                     break
 
@@ -128,7 +130,7 @@ def auto_eval(dictionary, hidden, model):
 
 total_loss = 0
 hidden = model.init_hidden(1)
-dictionary = dictionary_corpus.Dictionary("CHILDES")
+dictionary = dictionary_corpus.Dictionary(args.data)
 with torch.no_grad():
     auto_eval(hidden = hidden, dictionary = dictionary, model = model)
 
