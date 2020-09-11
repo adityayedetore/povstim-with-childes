@@ -1,9 +1,9 @@
 Det_S -> the | some | this 
 Det_P -> the | some | those
-N_S -> dog | doll | girl | boy | animal | man | person | horse 
-N_P -> dogs | dolls | girls | boys | animals | men | people | horses 
+N_S -> dog | baby | girl | boy | animal | child | person | horse 
+N_P -> dogs | babies | girls | boys | animals | children | people | horses 
 V_intrans -> play | read | draw | sit | fall | talk | sleep | try | work | walk
-V_trans -> like | see | find | help | feed | pull | pick | visit | watch | reach
+V_trans -> call | see | find | help | feed | know | pick | visit | watch | reach
 Aux_P -> do | did | can | would | shall
 Aux_S -> does | did | can | would | shall
 Prep -> by | behind 
