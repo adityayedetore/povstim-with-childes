@@ -1,10 +1,13 @@
 from nltk import CFG
 import argparse
+import pandas as pd
 
 parser = argparse.ArgumentParser(description="break down results for analysis")
 
-parser.add_argument('--data', type=str, default='output.txt', 
+parser.add_argument('--data', type=str, default='none', 
         help='path to file to analyze')
+parser.add_argument('--out', type=str, default='output.txt',
+        help='path to output results')
 
 args = parser.parse_args()
 
@@ -21,9 +24,9 @@ with open(args.data) as f:
     i = 0
     for line in f:
         if i % 2 == 0:
-            targets.append(line)
+            targets.append(line[7:-1])
         else:
-            actuals.append(line)
+            actuals.append(line[7:-1])
         i += 1
 
 def get_first_aux(words, aux_list):
@@ -32,28 +35,22 @@ def get_first_aux(words, aux_list):
             return word
     return "no aux"
 
-gfeim = 0 #gen first == input main
-gfeif = 0 #gen first == input first
-other = 0 
-gfeim_list = []
-gfeif_list = []
-other_list = [] 
-for i in range(0, len(targets)):
-    target = targets[i].split()
-    actual = actuals[i].split()
-    if target[target.index('.') + 1] == actual[actual.index('.') + 1]:
-        gfeim += 1
-        gfeim_list.append(' '.join(actual))
-    elif get_first_aux(target, aux_list) == actual[actual.index('.') + 1]:
-        gfeif += 1
-        gfeif_list.append(' '.join(actual))
-    else:
-        other += 1
-        other_list.append(' '.join(actual))
+index=range(0, len(targets))
+columns=['target','actual', 'target_main_aux', 'target_first_aux', 
+        'actual_main_aux', 'move_main_aux', 'move_first_aux', 'move_other_aux']
+df = pd.DataFrame(index=index, columns=columns)
+df['target'] = targets
+df['actual'] = actuals
 
-print("gen first == input main: " + str(gfeim))
-print("gen first == input first: " + str(gfeif))
-print("other: " + str(other))
-print("total: " + str(len(targets)))
-print(other_list)
-        
+for i in range(0, len(targets)):
+    target = df['target'][i].split()
+    actual = df['actual'][i].split()
+    df['target_main_aux'][i] = target[target.index('.') + 1]
+    df['target_first_aux'][i] = get_first_aux(target, aux_list)
+    df['actual_main_aux'][i] = actual[actual.index('.') + 1]
+    df['move_main_aux'][i] = int(df['target_main_aux'][i] == df['actual_main_aux'][i])
+    df['move_first_aux'][i] = int(df['target_first_aux'][i] == df['actual_main_aux'][i])
+    df['move_other_aux'][i] = int((not df['move_main_aux'][i]) and (not df['move_first_aux'][i]))
+
+
+df.to_csv(args.out)
