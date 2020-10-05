@@ -1,6 +1,6 @@
-from nltk import CFG
 import argparse
 import pandas as pd
+from collections import defaultdict
 
 parser = argparse.ArgumentParser(description="break down results for analysis")
 
@@ -10,13 +10,6 @@ parser.add_argument('--out', type=str, default='output.txt',
         help='path to output results')
 
 args = parser.parse_args()
-
-with open("../gen/vocab-cfg.txt") as f:
-    cfg_str = f.read()
-
-cfg = CFG.fromstring(cfg_str)
-
-aux_list = [str(x).split(' -> ')[1] for x in cfg.productions() if 'Aux' in str(x)]
 
 targets = []
 actuals = []
@@ -28,6 +21,10 @@ with open(args.data) as f:
         else:
             actuals.append(line[7:-1])
         i += 1
+
+aux_list = [x.split() for x in targets]
+aux_list = list(set(x[x.index('.') + 1] for x in aux_list))
+aux_list.sort()
 
 def get_first_aux(words, aux_list):
     for word in words:
@@ -41,7 +38,7 @@ columns=['target','actual', 'target_main_aux', 'target_first_aux',
 df = pd.DataFrame(index=index, columns=columns)
 df['target'] = targets
 df['actual'] = actuals
-
+acc_by_aux = defaultdict(int)
 for i in range(0, len(targets)):
     target = df['target'][i].split()
     actual = df['actual'][i].split()
@@ -51,6 +48,13 @@ for i in range(0, len(targets)):
     df['move_main_aux'][i] = int(df['target_main_aux'][i] == df['actual_main_aux'][i])
     df['move_first_aux'][i] = int(df['target_first_aux'][i] == df['actual_main_aux'][i])
     df['move_other_aux'][i] = int((not df['move_main_aux'][i]) and (not df['move_first_aux'][i]))
-
+    acc_by_aux[df['target_main_aux'][i]] += df['move_main_aux'][i]
+    acc_by_aux[df['target_main_aux'][i] + '~total'] += 1
 
 df.to_csv(args.out)
+
+with open(args.out + '~summary', 'w') as f:
+    for aux in aux_list:
+        f.write(aux + ": \t" + str(acc_by_aux[aux]/acc_by_aux[aux + '~total'])[:10] + 
+                "\t" + str(acc_by_aux[aux]) + "\t" + str(acc_by_aux[aux + '~total']) + '\n')
+
